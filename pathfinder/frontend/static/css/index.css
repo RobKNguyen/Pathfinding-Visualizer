@@ -1,0 +1,60 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#main {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+
+#app {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.grid {
+    margin: 100px 0 0 350px;
+    width: 100%;
+  }
+
+.node {
+    width: 25px;
+    height: 25px;
+    outline: 1px solid rgb(124, 121, 121);
+    display: inline-block;
+    transition: 0.5s;
+  }
+
+.node-wall {
+    width: 25px;
+    height: 25px;
+    outline: 1px solid rgb(91, 124, 87);
+    background-color: rgb(82, 90, 102);
+    display: inline-block;
+    transition: 0.5s;
+}
+
+.node-start {
+    width: 25px;
+    height: 25px;
+    outline: 1px solid rgb(91, 124, 87);
+    background-color: rgb(0, 133, 29);
+    display: inline-block;
+}
+
+.node-finish {
+    width: 25px;
+    height: 25px;
+    outline: 1px solid rgb(91, 124, 87);
+    background-color: rgb(255, 0, 0);
+    display: inline-block;
+}
+/* .node:hover {
+    background-color:rgb(75, 203, 253);
+} */
