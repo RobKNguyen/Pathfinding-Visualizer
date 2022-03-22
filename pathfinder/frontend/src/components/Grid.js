@@ -1,12 +1,15 @@
 import React, { Component} from "react";
 import Node from './Node/Node';
 import './css/Grid.css';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Navbar from './Menu/Navbar';
+import {BFS} from './Algorithms/BFS';
 //import { render } from "react-dom";
 
 const STARTING_ROW =  5;
 const STARTING_COL = 5;
-const FINISHING_ROW = 15;
-const FINISHING_COL = 15;
+const FINISHING_ROW = 20;
+const FINISHING_COL = 45;
 
 
 export default class App extends Component {
@@ -14,7 +17,11 @@ export default class App extends Component {
     super(props);
     this.state = {
         grid: [],
-        mouseisPressed: false
+        mouseisPressed: false,
+        STARTING_ROW: 5,
+        STARTING_COL: 5,
+        FINISHING_ROW: 20,
+        FINISHING_COL: 45
     };
   }
 
@@ -53,13 +60,45 @@ export default class App extends Component {
       this.setState({grid});
   }
 
+  animateBFS(visitedNodesInOrder) {
+    for (let i = 0; i <= visitedNodesInOrder.length; i++) {
+      if (i === visitedNodesInOrder.length) {
+        setTimeout(() => {
+          //console.log("REE");
+        }, 10 * i);
+        return;
+      }
+      setTimeout(() => {
+        const node = visitedNodesInOrder[i];
+        //console.log(`node-${node.row}-${node.col}`);
+        document.getElementById(`node-${node.row}-${node.col}`).className =
+          'node node-visited';
+      }, 10 * i);
+    }
+  }
+
+  visualizeBFS() {
+    const { grid } = this.state;
+    const start_node = grid[STARTING_ROW][STARTING_COL];
+    const finish_node = grid[FINISHING_ROW][FINISHING_COL];
+    const node_order = BFS(grid, start_node, finish_node);
+    this.animateBFS(node_order);
+  }
+
+  handleChangeStarter(){
+    STARTING_ROW = 3;
+    STARTING_COL = 7;
+  }
+
   render() {
     const {grid, mouseIsPressed} = this.state;
     const mystyle = {
       backgroundColor: "black"
     }
     return (
-        
+        <>
+        <Navbar onClick={() => this.visualizeBFS()}
+                handleChangeStarter={() => this.handleChangeStarter()} />
         <div className="grid">
           {grid.map((row, rowIdx) => {
             return (
@@ -89,6 +128,7 @@ export default class App extends Component {
             );
           })}
         </div>
+        </>
       
     );
   }
@@ -103,7 +143,7 @@ const getInitialGrid = () => {
           }
           grid.push(currRow);
       }
-      console.log(grid);
+      //console.log(grid);
       return grid;
 };
 
