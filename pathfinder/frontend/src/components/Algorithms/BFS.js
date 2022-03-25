@@ -7,6 +7,8 @@ export function BFS(grid, start_node, finish_node) {
     // console.log(node_queue);
     //console.log(visitedOrdered);
     const directions = [[1,0], [0,1], [-1,0], [0,-1]];
+    node_queue[0].distance = 0;
+
     while(node_queue.length != 0) {
         const current = node_queue.shift();
         if (current == finish_node) {
@@ -29,6 +31,12 @@ export function BFS(grid, start_node, finish_node) {
             if (isValid(visitedOrdered, grid, adjRow, adjCol)) {
                 node_queue.push(grid[adjRow][adjCol]);
                 visitedOrdered.push(grid[adjRow][adjCol]);
+                updateUnvisitedNeighbors(current, grid[adjRow][adjCol], grid);
+
+                //console.log(current.distance);
+                // if (current.previousNode != null) {
+                // console.log(` Previous of (${current.row},${current.col}) is (${current.previousNode.row},${current.previousNode.col})`);
+                // }
                 if (grid[adjRow][adjCol] == finish_node) {
                     node_queue = []
                     break;
@@ -40,6 +48,23 @@ export function BFS(grid, start_node, finish_node) {
     }
     return visitedOrdered;
 }
+
+function updateUnvisitedNeighbors(node, neighbor, grid) {
+    neighbor.distance = node.distance + 1;
+    neighbor.previousNode = node;
+}
+
+export function getShortestPathOrder(finishNode) {
+    const nodesShortestPathOrder = [];
+    let currentNode = finishNode;
+    while(currentNode !== null) {
+        nodesShortestPathOrder.unshift(currentNode);
+        currentNode = currentNode.previousNode;
+    }
+    return nodesShortestPathOrder;
+}
+
+
 
 function isValid(visited,grid, row, col) {
     if (row < 0 || col < 0 || row >= grid.length || col >= grid[0].length){
@@ -53,3 +78,4 @@ function isValid(visited,grid, row, col) {
     }
     return true;
 }
+

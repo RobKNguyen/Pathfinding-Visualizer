@@ -1,93 +1,167 @@
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
+html,
+/* body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 #main {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-}
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+} */
 
 #app {
-    width: 100%;
-    height: 100%;
-    display: flex;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .grid {
-    margin: 100px 0 0 350px;
-    width: 100%;
-  }
+  margin: 100px 0 0 350px;
+  width: 100%;
+}
 
 .node {
-    width: 25px;
-    height: 25px;
-    outline: 1px solid rgb(124, 121, 121);
-    display: inline-block;
-    transition: 0.5s;
-  }
+  width: 25px;
+  height: 25px;
+  outline: 1px solid rgb(124, 121, 121);
+  display: inline-block;
+  
+}
 
 .node-wall {
-    width: 25px;
-    height: 25px;
-    outline: 1px solid rgb(91, 124, 87);
-    background-color: rgb(82, 90, 102);
-    display: inline-block;
-    transition: 0.5s;
+  width: 25px;
+  height: 25px;
+  outline: 1px solid rgb(91, 124, 87);
+  background-color: rgb(82, 90, 102);
+  display: inline-block;
+  transition: 0.5s;
 }
 
 .node-start {
-    /* width: 25px;
-    height: 25px;
-    outline: 1px solid rgb(91, 124, 87);
-    background-color: rgb(0, 133, 29);
-    display: inline-block; */
-    background-color: rgb(0, 133, 29);
+  /* width: 25px;
+  height: 25px;
+  outline: 1px solid rgb(91, 124, 87); */
+  background-color: rgb(0, 133, 29);
+  transition: 0s;
+  /* display: inline-block; */
 }
 
 .node-finish {
-    /* width: 25px;
-    height: 25px;
-    outline: 1px solid rgb(91, 124, 87);
-    background-color: rgb(255, 0, 0);
-    display: inline-block; */
-    background-color: rgb(255, 0, 0);
+  /* width: 25px;
+  height: 25px;
+  outline: 1px solid rgb(91, 124, 87); */
+  background-color: rgb(255, 0, 0);
+  transition: 0s;
+  /* display: inline-block; */
 }
 
 .node-visited {
-    animation-name: visitedAnimation;
-    animation-duration: 1.5s;
-    animation-timing-function: ease-in-out;
-    animation-delay: 0;
-    animation-direction: alternate;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
-    animation-play-state: running;
+  animation-name: visitedAnimation;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-in-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+
+@keyframes visitedAnimation {
+  0% {
+    transform: scale(0.3);
+    background-color: rgba(0, 0, 66, 0.75);
+    border-radius: 100%;
   }
 
-  @keyframes visitedAnimation {
-    0% {
-      transform: scale(0.3);
-      background-color: rgba(0, 0, 66, 0.75);
-      border-radius: 100%;
-    }
-  
-    50% {
-      background-color: rgba(17, 104, 217, 0.75);
-    }
-  
-    75% {
-      transform: scale(1.2);
-      background-color: rgba(0, 217, 159, 0.75);
-    }
-  
-    100% {
-      transform: scale(1);
-      background-color: rgba(0, 190, 218, 0.75);
-    }
+  50% {
+    background-color: rgba(17, 104, 217, 0.75);
   }
-/* Below for navbar */
+
+  75% {
+    transform: scale(1.2);
+    background-color: rgba(0, 217, 159, 0.75);
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: rgba(0, 190, 218, 0.75);
+  }
+}
+
+.node-shortest-path {
+  animation-name: shortestPath;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+  animation-delay: 0s;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-play-state: running;
+}
+
+@keyframes shortestPath {
+  0% {
+    transform: scale(0.6);
+    background-color: rgb(209, 209, 0);
+  }
+
+  50% {
+    transform: scale(1.2);
+    background-color: rgb(255, 254, 106);
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: rgb(255, 254, 106);
+  }
+}
+
+/* .navbar {
+  height: 10 vh;
+  background: #1b1919;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar-logo {
+  color: white;
+  text-decoration: none;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 10rem;
+}
+
+.nav-items {
+  display: flex;
+  list-style: none;
+  text-align: center;
+  width: 70vw;
+  justify-content: flex-end;
+  margin-right: 2rem;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  height: 10vh;
+}
+
+.nav-item a {
+  text-decoration: none;
+  color: white;
+  font-size: 1.1rem;
+  margin-right: 2rem;
+  padding: 6px 16px;
+  border-radius: 5px;
+}
+
+.nav-item a:hover {
+  background: rgb(0, 212, 212);
+} */
