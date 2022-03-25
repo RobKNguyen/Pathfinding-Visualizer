@@ -6,19 +6,19 @@ export default class Navbar extends Component {
 
         render() {
             const {
-                onClick,
-                handleChangeStarter
+                handleBFS,
+                handleDijkstras
             } = this.props;
             return (
                 <>
                 <h1>Navbar</h1>
                 <button
                     className="bfs"
-                    onClick={() => onClick()}
+                    onClick={() => handleBFS()}
                 >Breadth-First Search</button>
                 <button
-                    className="clicker"
-                    onClick={() => handleChangeStarter()}
+                    className="dijkstras"
+                    onClick={() => handleDijkstras()}
                 >Change Starter</button>
                 </>
             );

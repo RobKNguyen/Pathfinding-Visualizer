@@ -4,6 +4,7 @@ import './css/Grid.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Navbar from './Menu/Navbar';
 import { BFS, getShortestPathOrder } from './Algorithms/BFS';
+import { dijkstras } from './Algorithms/Dijkstras';
 //import { render } from "react-dom";
 
 
@@ -204,50 +205,47 @@ export default class App extends Component {
       })
     })
     const start_node = grid[start_row][start_col];
-    // console.log(start_node);
     const finish_node = grid[finish_row][finish_col];
     const node_order = BFS(grid, start_node, finish_node);
     const shortest_path_order = getShortestPathOrder(finish_node);
-    //console.log(this.state.post_animation);
+
     if (!this.state.post_animation) {
-      //console.log("NOT INSTANT (visualizeBFS)");
       this.animateBFS(node_order, shortest_path_order);
     } else {
-      //console.log("INSTANT (visualizeBFS)");
+
       this.animateBFSInstant(node_order, shortest_path_order);
     }
 
     this.setState({post_animation: true});
   }
 
-
-
-  handleChangeStarter(){
-    //console.log("REE");
-    //console.log(`Starting: (${this.state.start_row}, ${this.state.start_col})\nFinishing: (${this.state.finish_row}, ${this.state.finish_col})`);
-    //console.log(this.state.grid);
-    const currentStartNode = this.state.grid[this.state.start_row][this.state.start_col];
-    const currentFinishNode = this.state.grid[this.state.finish_row][this.state.finish_col];
-
-
-    const newStartNode = this.state.grid[0][0];
-    const newFinishNode = this.state.grid[20][20];
-    this.setState({start_row: 0, start_col: 0, finish_row: 20, finish_col: 20});
-
-
-    //console.log(currentStartNode);
-    //console.log(currentFinishNode);
-    const newGrid = getNewGridToggleEndPoints(this.state.grid, currentStartNode, currentFinishNode, newStartNode, newFinishNode);
-    this.setState({grid: newGrid});
+  visualizeDijkstras() {
+    console.log("PERFORMING DIJKSTRAS");
+    const { grid, mouseisPressed, start_row, start_col, finish_row, finish_col} = this.state;
+    grid.map( function(row) {
+      return row.map( function (cell ) {
+        cell.previousNode = null;
+        cell.isVisited = false;
+        return;
+      })
+    });
+    const start_node = grid[start_row][start_col];
+    const finish_node = grid[finish_row][finish_col];
+    const node_order = dijkstras(grid, start_node, finish_node);
 
   }
+
+
+
 
   render() {
     const {grid, mouseIsPressed, start_row, start_col, finish_row, finish_col} = this.state;
     return (
         <>
-        <Navbar onClick={this.visualizeBFS.bind(this)}
-                handleChangeStarter={this.handleChangeStarter.bind(this)} />
+        <Navbar handleBFS={this.visualizeBFS.bind(this)}
+                handleDijkstras={this.visualizeDijkstras.bind(this)}
+
+                 />
         <div className="grid">
           {grid.map((row, rowIdx) => {
             return (
