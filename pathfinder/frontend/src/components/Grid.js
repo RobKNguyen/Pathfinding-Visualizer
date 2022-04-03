@@ -3,8 +3,10 @@ import Node from './Node/Node';
 import './css/Grid.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Navbar from './Menu/Navbar';
-import { BFS, getShortestPathOrder } from './Algorithms/BFS';
-import { dijkstras } from './Algorithms/Dijkstras';
+import ControlPanel from './Menu/ControlPanel';
+import { BFS, getShortestPathBFS } from './Algorithms/BFS';
+import { dijkstras, getShortestPathDijkstras } from './Algorithms/Dijkstras';
+import { Grid } from '@mui/material';
 //import { render } from "react-dom";
 
 
@@ -13,92 +15,119 @@ export default class App extends Component {
     super(props);
     this.state = {
         grid: [],
-        mouseisPressed: false,
+        mouseIsPressed: false,
         start_row: 2,
         start_col: 5,
         finish_row: 7,
         finish_col: 20,
         start_node_selected: false,
         finish_node_selected:false,
-        post_animation: false
+        post_animation: false,
+        pathfinding_algorithm: "bfs",
+        row_dimension: 25,
+        col_dimension: 50
     };
   }
 
 
   // Handles Nodes being pressed.
   handleMouseEnter(row, col, el) {
+    
+    const {start_node_selected, post_animation, finish_node_selected, pathfinding_algorithm} = this.state;
+    // console.log(`start_node_selected: ${start_node_selected}\npost_animation: ${post_animation}\nfinish_node_selected: ${finish_node_selected}\npathfinding_algorithm: ${pathfinding_algorithm}`);
+    const current = this.state.grid[row][col];
+    // const isStartSelected = this.state.start_node_selected;
+    // const isPostAnimation = this.state.post_animation;
+    // const isFinishSelected = this.state.finish_node_selected;
+    // const pathfindingAlgorithm = this.state.pathfinding_algorithm;
     // IF button is clicked.
+    // console.log(`this.state.mouseIsPressed: ${this.state.mouseIsPressed}`);
     if (!this.state.mouseIsPressed) return;
 
-    // If before animation:
-    if (!this.state.post_animation) {
-        if (this.state.start_node_selected) {
+        wallbreaker: if (start_node_selected) {
+          // console.log("START NODE SELECTED");
+          if (current.isWall || current.isFinish) break wallbreaker;
+          
           const newGrid = changeEndPoints(this.state.grid, row, col, this.state.grid[this.state.start_row][this.state.start_col], "START");
-          this.setState({grid: newGrid, start_row: row, start_col: col});
-        } else if (this.state.finish_node_selected) {
+          // this.setState({grid: newGrid, start_row: row, start_col: col});
+
+          if (post_animation) {
+                this.setState({grid: newGrid, start_row: row, start_col: col}, () => {
+                  if (pathfinding_algorithm === "bfs") {
+                    this.visualizeBFS();
+                  } else if (pathfinding_algorithm === "dijkstras") {
+                    this.visualizeDijkstras();
+                  }
+                });
+          } else {
+            this.setState({grid: newGrid, start_row: row, start_col: col});
+          }
+
+
+        } else if (finish_node_selected) {
+          if (current.isWall || current.isStart) break wallbreaker;
           const newGrid = changeEndPoints(this.state.grid, row, col, this.state.grid[this.state.finish_row][this.state.finish_col], "FINISH");
-          this.setState({grid: newGrid, finish_row: row, finish_col: col});
+
+          if (post_animation) {
+            this.setState({grid: newGrid, finish_row: row, finish_col: col}, () => {
+              if (pathfinding_algorithm === "bfs") {
+                this.visualizeBFS();
+              } else if (pathfinding_algorithm === "dijkstras") {
+                this.visualizeDijkstras();
+              }
+            });
+          } else {
+            this.setState({grid: newGrid, finish_row: row, finish_col: col});
+          }
         } 
         else if (!((row == this.state.start_row && col == this.state.start_col) || (row == this.state.finish_row && col == this.state.finish_col))) {
           const newGrid = getNewGridToggleWall(this.state.grid, row, col);
-          this.setState({grid: newGrid});
+
+          if (post_animation) {
+            this.setState({grid: newGrid}, () => {
+              if (pathfinding_algorithm === "bfs") {
+                this.visualizeBFS();
+              } else if (pathfinding_algorithm === "dijkstras") {
+                this.visualizeDijkstras();
+              }
+            });
+          } else{
+            this.setState({grid: newGrid});
+          }
         }
-    } else {
-      if (this.state.start_node_selected) {
-        const newGrid = changeEndPoints(this.state.grid, row, col, this.state.grid[this.state.start_row][this.state.start_col], "START");
-        this.setState({grid: newGrid, start_row: row, start_col: col}, () => {
-          this.visualizeBFS();
-        });
-        
-      } else if (this.state.finish_node_selected) {
-        const newGrid = changeEndPoints(this.state.grid, row, col, this.state.grid[this.state.finish_row][this.state.finish_col], "FINISH");
-        this.setState({grid: newGrid, finish_row: row, finish_col: col}, () => {
-          this.visualizeBFS();
-        });
-      } 
-      else if (!((row == this.state.start_row && col == this.state.start_col) || (row == this.state.finish_row && col == this.state.finish_col))) {
-        const newGrid = getNewGridToggleWall(this.state.grid, row, col);
-        this.setState({grid: newGrid}, () => {
-          this.visualizeBFS();
-        });
-      }
-    }
+
   }
 
   handleMouseDown(row, col, el) {
     // If before animation:
-    if (!this.state.post_animation) {
         if (!((row == this.state.start_row && col == this.state.start_col) || (row == this.state.finish_row && col == this.state.finish_col))) {
-          const newGrid = getNewGridToggleWall(this.state.grid, row, col);
-          this.setState({grid: newGrid, mouseIsPressed: true});
-          console.log(el);
-        } else if (row == this.state.start_row && col == this.state.start_col) {
-          // console.log("STARTER SELECTED")
-          this.setState({start_node_selected: true});
-        } else if (row == this.state.finish_row && col == this.state.finish_col) {
+          if (!this.state.post_animation) {
+            const newGrid = getNewGridToggleWall(this.state.grid, row, col);
+            this.setState({grid: newGrid, mouseIsPressed: true});
+            // console.log("REE");
+            console.log(el);
+          } else {
+            const newGrid = getNewGridToggleWall(this.state.grid, row, col);
+            this.setState({grid:newGrid, mouseIsPressed: true}, () => {
+              if (this.state.pathfinding_algorithm === "bfs") {
+                this.visualizeBFS();
+              } else if (this.state.pathfinding_algorithm === "dijkstras") {
+                this.visualizeDijkstras();
+              }
+          });
+          }
+          } else if (row == this.state.start_row && col == this.state.start_col) {
+              this.setState({start_node_selected: true});
+          } else if (row == this.state.finish_row && col == this.state.finish_col) {
           // console.log("FINISH SELECTED")
-          this.setState({finish_node_selected: true});
-        }
-    } else {
-      if (!((row == this.state.start_row && col == this.state.start_col) || (row == this.state.finish_row && col == this.state.finish_col))) {
-        const newGrid = getNewGridToggleWall(this.state.grid, row, col);
-        this.setState({grid:newGrid, mouseIsPressed: true}, () => {
-          this.visualizeBFS();
-        });
-        //console.log(this.state.grid);
-
-      } else if (row == this.state.start_row && col == this.state.start_col) {
-        this.setState({start_node_selected: true});
-      } else if (row == this.state.finish_row && col == this.state.finish_col) {
-        this.setState({finish_node_selected: true});
-      }
-
-    }
-    this.setState({mouseIsPressed: true});
+              this.setState({finish_node_selected: true});
+          }
+          this.setState({mouseIsPressed: true});
 
   }
 
   handleMouseUp() {
+    // console.log("handleMouseUp()");
     this.setState({mouseIsPressed: false, start_node_selected: false, finish_node_selected: false });
   }
 
@@ -109,12 +138,12 @@ export default class App extends Component {
   componentDidMount() {
       //this.setState({start_row: 5, start_col: 5, finish_row: 0, finish_col: 0});
       //console.log(`(${this.state.start_row}, ${this.state.start_col}) -> (${this.state.finish_row}, ${this.state.finish_col})`);
-      const grid = getInitialGrid(this.state.start_row, this.state.start_col, this.state.finish_row, this.state.finish_col);
+      const grid = getInitialGrid(this.state.start_row, this.state.start_col, this.state.finish_row, this.state.finish_col, this.state.row_dimension, this.state.col_dimension);
       
       this.setState({grid});
   }
 
-  animateBFSInstant(visitedNodesInOrder, shortest_path_order) {
+  animateAlgorithmInstant(visitedNodesInOrder, shortest_path_order) {
     //console.log(this.state.post_animation);
     // console.log("ERASING VISITED AND SHORTEST PATH NODES");
     //console.log(`vistedNodeInOrder: ${visitedNodesInOrder}\nshortest_path_order: ${shortest_path_order}`);
@@ -151,7 +180,7 @@ export default class App extends Component {
 
   }
 
-  animateBFS(visitedNodesInOrder, shortest_path_order) {
+  animateAlgorithm(visitedNodesInOrder, shortest_path_order) {
     //console.log(this.state.post_animation);
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
       if (i === visitedNodesInOrder.length) {
@@ -181,57 +210,71 @@ export default class App extends Component {
             const node = shorted_path_order[i];
             document.getElementById(`node-${node.row}-${node.col}`).className =
               'node node-shortest-path';
-          }, 10 * i);
+          }, 15 * i);
         }
     } else {
         for (let i = 1; i < shorted_path_order.length-1; i++) {
             const node = shorted_path_order[i];
             document.getElementById(`node-${node.row}-${node.col}`).className =
               'node node-shortest-path';
+            
         }
-        
     }
+    // this.setState({post_animation: true});
   }
 
   visualizeBFS() {
-    console.log(`(${this.state.start_row}, ${this.state.start_col}) (visualizeBFS)`);
+    // console.log(`(${this.state.start_row}, ${this.state.start_col}) (visualizeBFS)`);
     this.setState({post_animation: true});
-    const { grid, mouseisPressed, start_row, start_col, finish_row, finish_col} = this.state;
+    const { grid, mouseIsPressed, start_row, start_col, finish_row, finish_col} = this.state;
     grid.map( function(row) {
       return row.map( function (cell ) {
         cell.previousNode = null;
         cell.isVisited = false;
+        cell.distance = Infinity;
         return;
       })
     })
     const start_node = grid[start_row][start_col];
     const finish_node = grid[finish_row][finish_col];
     const node_order = BFS(grid, start_node, finish_node);
-    const shortest_path_order = getShortestPathOrder(finish_node);
+    const shortest_path_order = getShortestPathBFS(finish_node);
 
     if (!this.state.post_animation) {
-      this.animateBFS(node_order, shortest_path_order);
+      this.animateAlgorithm(node_order, shortest_path_order);
     } else {
 
-      this.animateBFSInstant(node_order, shortest_path_order);
+      this.animateAlgorithmInstant(node_order, shortest_path_order);
     }
-
-    this.setState({post_animation: true});
+    // this.setState({pathfinding_algorithm: "bfs"});
+    this.setState({post_animation: true, pathfinding_algorithm: "bfs"});
   }
 
   visualizeDijkstras() {
-    console.log("PERFORMING DIJKSTRAS");
-    const { grid, mouseisPressed, start_row, start_col, finish_row, finish_col} = this.state;
+    // console.log("PERFORMING DIJKSTRAS");
+    const { grid, mouseIsPressed, start_row, start_col, finish_row, finish_col} = this.state;
     grid.map( function(row) {
       return row.map( function (cell ) {
         cell.previousNode = null;
         cell.isVisited = false;
+        cell.distance = Infinity;
         return;
       })
     });
     const start_node = grid[start_row][start_col];
     const finish_node = grid[finish_row][finish_col];
     const node_order = dijkstras(grid, start_node, finish_node);
+    const shortest_path_order = getShortestPathDijkstras(finish_node);
+
+    if (!this.state.post_animation) {
+      this.animateAlgorithm(node_order, shortest_path_order);
+    } else {
+
+      this.animateAlgorithmInstant(node_order, shortest_path_order);
+    }
+    // this.setState({pathfinding_algorithm: "dijkstras"});
+    this.setState({post_animation: true, pathfinding_algorithm: "dijkstras"});
+
 
   }
 
@@ -242,10 +285,22 @@ export default class App extends Component {
     const {grid, mouseIsPressed, start_row, start_col, finish_row, finish_col} = this.state;
     return (
         <>
-        <Navbar handleBFS={this.visualizeBFS.bind(this)}
+                <Navbar handleBFS={this.visualizeBFS.bind(this)}
                 handleDijkstras={this.visualizeDijkstras.bind(this)}
 
                  />
+        
+        <h1>{this.state.start_row}</h1>
+        <Grid container
+              spacing={2}>
+            <Grid item xs={2}>
+              <div className="mega-menu">
+                <ControlPanel />
+              </div>
+            </Grid>
+            <Grid item xs={8}
+                
+                  >
         <div className="grid">
           {grid.map((row, rowIdx) => {
             return (
@@ -275,19 +330,23 @@ export default class App extends Component {
             );
           })}
         </div>
+        </Grid>
+        <Grid item xs={2}><div className="right-main"><h1>hi</h1></div></Grid>
+            
+        </Grid>
         </>
       
     );
   }
 }
 
-const getInitialGrid = (stRow, stCol, finRow, finCol) => {
+const getInitialGrid = (stRow, stCol, finRow, finCol, row_dim, col_dim) => {
       const grid = [];
       //console.log(this.state.starting_row);
 
-      for (let row = 0; row < 25; row++) {
+      for (let row = 0; row < row_dim; row++) {
           const currRow = [];
-          for (let col = 0; col < 50; col++) {
+          for (let col = 0; col < col_dim; col++) {
               currRow.push(createNode(col,row,stRow, stCol, finRow, finCol));
           }
           grid.push(currRow);

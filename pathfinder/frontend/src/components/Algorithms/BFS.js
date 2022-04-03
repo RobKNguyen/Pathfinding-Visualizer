@@ -1,47 +1,33 @@
+// Main BFS function:
 export function BFS(grid, start_node, finish_node) {
-    // console.log(grid);
+
     const visitedOrdered = [];
     let node_queue = [];
-    node_queue.push(start_node);
     visitedOrdered.push(start_node);
-    // console.log(node_queue);
-    //console.log(visitedOrdered);
+    node_queue.push(start_node);
     const directions = [[1,0], [0,1], [-1,0], [0,-1]];
     node_queue[0].distance = 0;
 
     while(node_queue.length != 0) {
         const current = node_queue.shift();
         if (current == finish_node) {
-            //console.log(`${finish_node.col} == ${current.col}. WE DID IT`);
             visitedOrdered.push(current);
             break;
         }
-        if (current == finish_node) {
-            visitedOrdered.push()
-            break;
-        }
+
         for (const dir  of directions) {
-            //console.log(`${dir[0]}, ${dir[1]}`);
             const adjRow = current.row + dir[0];
             const adjCol = current.col + dir[1];
 
-            // console.log(`${adjRow}, ${adjCol}`);
-            // console.log(grid[adjRow][adjCol]);
-            // console.log(visitedOrdered.includes(grid[adjRow][adjCol]));
             if (isValid(visitedOrdered, grid, adjRow, adjCol)) {
                 node_queue.push(grid[adjRow][adjCol]);
                 visitedOrdered.push(grid[adjRow][adjCol]);
                 updateUnvisitedNeighbors(current, grid[adjRow][adjCol], grid);
-
-                //console.log(current.distance);
-                // if (current.previousNode != null) {
-                // console.log(` Previous of (${current.row},${current.col}) is (${current.previousNode.row},${current.previousNode.col})`);
-                // }
+                
                 if (grid[adjRow][adjCol] == finish_node) {
                     node_queue = []
                     break;
                 }
-                
             }
         }
         
@@ -54,7 +40,7 @@ function updateUnvisitedNeighbors(node, neighbor, grid) {
     neighbor.previousNode = node;
 }
 
-export function getShortestPathOrder(finishNode) {
+export function getShortestPathBFS(finishNode) {
     const nodesShortestPathOrder = [];
     let currentNode = finishNode;
     while(currentNode !== null) {

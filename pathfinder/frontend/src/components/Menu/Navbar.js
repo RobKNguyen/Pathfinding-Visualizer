@@ -19,7 +19,7 @@ export default class Navbar extends Component {
                 <button
                     className="dijkstras"
                     onClick={() => handleDijkstras()}
-                >Change Starter</button>
+                >Dijkstras</button>
                 </>
             );
         }

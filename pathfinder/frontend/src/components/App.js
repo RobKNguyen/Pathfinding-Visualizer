@@ -5,12 +5,15 @@ import Grid from './Grid';
 export default class App extends Component {
   constructor(props) {
     super(props);
+    this.ChildElement = React.createRef();
   }
 
   render() {
     return (
       <div>
-        <Grid />
+      <div>
+        <Grid ref={this.ChildElement}/>
+      </div>
       </div>
     );
   }
