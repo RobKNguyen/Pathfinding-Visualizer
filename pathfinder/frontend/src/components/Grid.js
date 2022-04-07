@@ -27,6 +27,280 @@ export default class App extends Component {
         row_dimension: 25,
         col_dimension: 50
     };
+
+    this.handleRangeChange = this.handleRangeChange.bind(this);
+    this.handleSlider = this.handleSlider.bind(this);
+    this.handleDimension = this.handleDimension.bind(this);
+  }
+
+  handleRangeChange(e){
+
+    const {grid, start_row, start_col, finish_row, finish_col, post_animation, pathfinding_algorithm} = this.state;
+
+    if (isNaN(e.target.value)) return;
+    
+
+    let new_dimension = e.target.value;
+    if (new_dimension=== '') {
+      return;
+    }
+    const dimension_type = (e.target.className === "start-node row" || e.target.className === "finish-node row") ? this.state.row_dimension-1 : 
+    ((e.target.className === "start-node col" || e.target.className === "finish-node col") ? this.state.col_dimension-1 : null);
+    // console.log(dimension_type);
+    (e.target.value > dimension_type) ?
+      e.target.value = dimension_type :
+      (e.target.value < 0) ?
+      e.target.value = 0 : e.target.value = e.target.value;
+
+
+    if (e.target.className === "start-node row") {
+
+
+      (grid[e.target.value][start_col].isWall || grid[e.target.value][start_col].isFinish) ?
+      e.target.value = start_row : e.target.value = e.target.value;
+      new_dimension = e.target.value;
+      const newGrid = changeEndPoints(this.state.grid, new_dimension, this.state.start_col, this.state.grid[this.state.start_row][this.state.start_col], "START");
+      const slider_element = document.getElementById("range-slider-1");
+      changeRangeSlider(new_dimension, slider_element);
+
+      
+      if (post_animation) {
+      this.setState({grid: newGrid, start_row: new_dimension}, () => {
+        if (pathfinding_algorithm === "bfs") {
+          this.visualizeBFS();
+        } else if (pathfinding_algorithm === "dijkstras") {
+          this.visualizeDijkstras();
+        }
+      });
+
+
+    }else {
+      this.setState({grid: newGrid, start_row: new_dimension});
+    }
+    } else if (e.target.className === "start-node col") {
+
+    (grid[start_row][e.target.value].isWall || grid[start_row][e.target.value].isFinish) ?
+    e.target.value = start_col : e.target.value = e.target.value;
+    new_dimension = e.target.value;
+    const newGrid = changeEndPoints(this.state.grid, start_row, new_dimension, this.state.grid[this.state.start_row][this.state.start_col], "START");
+    const slider_element = document.getElementById("range-slider-2");
+    changeRangeSlider(new_dimension, slider_element);
+
+    if (post_animation) {
+      this.setState({grid: newGrid, start_col: new_dimension}, () => {
+        if (pathfinding_algorithm === "bfs") {
+          this.visualizeBFS();
+        } else if (pathfinding_algorithm === "dijkstras") {
+          this.visualizeDijkstras();
+        }
+      });
+    } else {
+      this.setState({grid: newGrid, start_col: new_dimension});
+    }
+    } else if (e.target.className === "finish-node row") {
+
+      (grid[e.target.value][finish_col].isWall || grid[e.target.value][finish_col].isStart) ?
+      e.target.value = finish_row : e.target.value = e.target.value;
+      new_dimension = e.target.value;
+
+      const newGrid = changeEndPoints(this.state.grid, new_dimension, finish_col, this.state.grid[this.state.finish_row][this.state.finish_col], "FINISH");
+      // this.setState({grid: newGrid, start_col: new_dimension});
+      const slider_element = document.getElementById("range-slider-3");
+      changeRangeSlider(new_dimension, slider_element);
+
+      if (post_animation) {
+        this.setState({grid: newGrid, finish_row: new_dimension}, () => {
+          if (pathfinding_algorithm === "bfs") {
+            this.visualizeBFS();
+          } else if (pathfinding_algorithm === "dijkstras") {
+            this.visualizeDijkstras();
+          }
+        });
+      } else {
+        this.setState({grid: newGrid, finish_row: new_dimension});
+      }
+  } else if (e.target.className === "finish-node col") {
+      (grid[finish_row][e.target.value].isWall || grid[finish_row][e.target.value].isStart) ?
+      e.target.value = finish_col : e.target.value = e.target.value;
+      new_dimension = e.target.value;
+
+      const newGrid = changeEndPoints(this.state.grid, finish_row, new_dimension, this.state.grid[this.state.finish_row][this.state.finish_col], "FINISH");
+      // this.setState({grid: newGrid, start_col: new_dimension});
+      const slider_element = document.getElementById("range-slider-4");
+      changeRangeSlider(new_dimension, slider_element);
+
+      if (post_animation) {
+        this.setState({grid: newGrid, finish_col: new_dimension}, () => {
+          if (pathfinding_algorithm === "bfs") {
+            this.visualizeBFS();
+          } else if (pathfinding_algorithm === "dijkstras") {
+            this.visualizeDijkstras();
+          }
+        });
+      } else {
+        this.setState({grid: newGrid, finish_col: new_dimension});
+      }
+  }
+  }
+
+  handleDimension(e) {
+
+    const {grid, post_animation, pathfinding_algorithm, start_row, start_col, finish_row, finish_col, row_dimension, col_dimension} = this.state;
+    //console.log(e);
+    const idx = (e.id).charAt((e.id).length - 1);
+    //console.log(idx);
+    
+    if (idx == 1) {
+      //console.log("PATH 1");
+      const new_row_dimension = e.value;
+      //console.log(`new_row_dimension: ${new_row_dimension}`);
+      const new_stRow = Math.ceil(new_row_dimension / 10);
+      const new_finRow = Math.ceil(new_row_dimension / 5);
+      // const newGrid = getInitialGrid(new_stRow, start_col, new_finRow, finish_col, new_row_dimension, col_dimension);
+      const newGrid2 = changeEndPoints(grid, new_stRow, start_col, grid[start_row][start_col], "START");
+      //console.log(newGrid2);
+      const newGrid3 = changeEndPoints(newGrid2, new_finRow, finish_col, grid[finish_row][finish_col], "FINISH");
+      //console.log(newGrid3);
+      const newGrid = resizeGrid(newGrid3, new_row_dimension, col_dimension, row_dimension, col_dimension);
+      //console.log(newGrid);
+      document.getElementsByClassName("start-node row")[0].value = new_stRow;
+      document.getElementsByClassName("finish-node row")[0].value = new_finRow;
+      changeRangeSlider(new_stRow, document.getElementById("range-slider-1"));
+      changeRangeSlider(new_finRow, document.getElementById("range-slider-3"));
+      if (post_animation) {
+        this.setState({grid: newGrid, row_dimension: new_row_dimension, start_row: new_stRow, start_col: start_col, finish_row: new_finRow, finish_col: finish_col}, () =>{
+          if (pathfinding_algorithm === "bfs") {
+            this.visualizeBFS();
+          } else if (pathfinding_algorithm === "dijkstras") {
+            this.visualizeDijkstras();
+          }
+        });
+      } else {
+        this.setState({grid: newGrid, row_dimension: new_row_dimension, start_row: new_stRow, start_col: start_col, finish_row: new_finRow, finish_col: finish_col});
+      }
+    } else {
+      //console.log("PATH 2");
+      const new_col_dimension = e.value;
+      const new_stCol = Math.ceil(new_col_dimension / 10);
+      const new_finCol = Math.ceil(new_col_dimension / 5);
+
+      const change_start_node = changeEndPoints(grid, start_row, new_stCol, grid[start_row][start_col], "START");
+      
+      const change_finish_node = changeEndPoints(change_start_node, finish_row, new_finCol, grid[finish_row][finish_col], "FINISH");
+      
+      const newGrid = resizeGrid(change_finish_node, row_dimension, new_col_dimension, row_dimension, col_dimension);
+      
+      document.getElementsByClassName("start-node col")[0].value = new_stCol;
+      document.getElementsByClassName("finish-node col")[0].value = new_finCol;
+      changeRangeSlider(new_stCol, document.getElementById("range-slider-2"));
+      changeRangeSlider(new_finCol, document.getElementById("range-slider-4"));
+      
+
+      if (post_animation) {
+        this.setState({grid: newGrid, col_dimension: new_col_dimension, start_row: start_row, start_col: new_stCol, finish_row: finish_row, finish_col: new_finCol}, () =>{
+          if (pathfinding_algorithm === "bfs") {
+            this.visualizeBFS();
+          } else if (pathfinding_algorithm === "dijkstras") {
+            this.visualizeDijkstras();
+          }
+        });
+      } else {
+        this.setState({grid: newGrid, col_dimension: new_col_dimension, start_row: start_row, start_col: new_stCol, finish_row: finish_row, finish_col: new_finCol});
+      }
+    }
+  }
+
+  handleSlider(e){
+
+    const {grid, post_animation, pathfinding_algorithm, start_row, start_col, finish_row, finish_col} = this.state;
+
+    if(e.target.id === "slider-1") {
+
+      (grid[e.target.value][start_col].isWall || grid[e.target.value][start_col].isFinish) ?
+      e.target.value = start_row : e.target.value = e.target.value;
+
+      document.getElementsByClassName("start-node row")[0].value = e.target.value;
+      const newGrid = changeEndPoints(this.state.grid, e.target.value, this.state.start_col, this.state.grid[this.state.start_row][this.state.start_col], "START");
+          // this.setState({grid: newGrid, start_row: row, start_col: col});
+          console.log(`start_row: ${start_row}\nstart_col: ${start_col}`)
+          if (post_animation) {
+                this.setState({grid: newGrid, start_row: e.target.value, start_col: start_col}, () => {
+                  if (pathfinding_algorithm === "bfs") {
+                    this.visualizeBFS();
+                  } else if (pathfinding_algorithm === "dijkstras") {
+                    this.visualizeDijkstras();
+                  }
+                });
+          } else {
+            this.setState({grid: newGrid, start_row: e.target.value, start_col: start_col});
+          }
+          // console.log(e.target.value);
+          // console.log(`slider-position: ${document.getElementById(`slider-thumb-1`).style.left}`);
+
+          // document.getElementsByClassName("start-node col")[0].value = col;
+    } else if (e.target.id === "slider-2") {
+
+      (grid[start_row][e.target.value].isWall || grid[start_row][e.target.value].isFinish) ?
+      e.target.value = start_col : e.target.value = e.target.value;
+
+      document.getElementsByClassName("start-node col")[0].value = e.target.value;
+      const newGrid = changeEndPoints(grid, start_row, e.target.value, grid[start_row][start_col], "START");
+          // this.setState({grid: newGrid, start_row: row, start_col: col});
+
+          if (post_animation) {
+                this.setState({grid: newGrid, start_row: start_row, start_col: e.target.value}, () => {
+                  if (pathfinding_algorithm === "bfs") {
+                    this.visualizeBFS();
+                  } else if (pathfinding_algorithm === "dijkstras") {
+                    this.visualizeDijkstras();
+                  }
+                });
+          } else {
+            this.setState({grid: newGrid, start_row: start_row, start_col: e.target.value});
+          }
+    } else if (e.target.id === "slider-3") {
+
+      (grid[e.target.value][finish_col].isWall || grid[e.target.value][finish_col].isStart) ?
+      e.target.value = finish_row : e.target.value = e.target.value;
+
+      document.getElementsByClassName("finish-node row")[0].value = e.target.value;
+      const newGrid = changeEndPoints(this.state.grid, e.target.value, finish_col, this.state.grid[this.state.finish_row][this.state.finish_col], "FINISH");
+          // this.setState({grid: newGrid, start_row: row, start_col: col});
+
+          if (post_animation) {
+                this.setState({grid: newGrid, finish_row: e.target.value, finish_col: finish_col}, () => {
+                  if (pathfinding_algorithm === "bfs") {
+                    this.visualizeBFS();
+                  } else if (pathfinding_algorithm === "dijkstras") {
+                    this.visualizeDijkstras();
+                  }
+                });
+          } else {
+            this.setState({grid: newGrid, finish_row: e.target.value, finish_col: finish_col});
+          }
+    }
+    else if (e.target.id === "slider-4") {
+
+      (grid[finish_row][e.target.value].isWall || grid[finish_row][e.target.value].isStart) ?
+      e.target.value = finish_col : e.target.value = e.target.value;
+
+      document.getElementsByClassName("finish-node col")[0].value = e.target.value;
+      const newGrid = changeEndPoints(this.state.grid, finish_row, e.target.value, this.state.grid[this.state.finish_row][this.state.finish_col], "FINISH");
+          // this.setState({grid: newGrid, start_row: row, start_col: col});
+
+          if (post_animation) {
+                this.setState({grid: newGrid, finish_row: finish_row, finish_col: e.target.value}, () => {
+                  if (pathfinding_algorithm === "bfs") {
+                    this.visualizeBFS();
+                  } else if (pathfinding_algorithm === "dijkstras") {
+                    this.visualizeDijkstras();
+                  }
+                });
+          } else {
+            this.setState({grid: newGrid, finish_row: finish_row, finish_col: e.target.value});
+          }
+    }
+    
   }
 
 
@@ -36,12 +310,6 @@ export default class App extends Component {
     const {start_node_selected, post_animation, finish_node_selected, pathfinding_algorithm} = this.state;
     // console.log(`start_node_selected: ${start_node_selected}\npost_animation: ${post_animation}\nfinish_node_selected: ${finish_node_selected}\npathfinding_algorithm: ${pathfinding_algorithm}`);
     const current = this.state.grid[row][col];
-    // const isStartSelected = this.state.start_node_selected;
-    // const isPostAnimation = this.state.post_animation;
-    // const isFinishSelected = this.state.finish_node_selected;
-    // const pathfindingAlgorithm = this.state.pathfinding_algorithm;
-    // IF button is clicked.
-    // console.log(`this.state.mouseIsPressed: ${this.state.mouseIsPressed}`);
     if (!this.state.mouseIsPressed) return;
 
         wallbreaker: if (start_node_selected) {
@@ -62,6 +330,17 @@ export default class App extends Component {
           } else {
             this.setState({grid: newGrid, start_row: row, start_col: col});
           }
+          
+          // For Range Slider:
+          document.getElementsByClassName("start-node row")[0].value = row;
+          document.getElementsByClassName("start-node col")[0].value = col;
+          const slider_1 = document.getElementById("range-slider-1");
+          const slider_2 = document.getElementById("range-slider-2")
+          changeRangeSlider(row, slider_1);
+          changeRangeSlider(col, slider_2);
+          slider_1.value=row;
+          slider_2.value=col;
+
 
 
         } else if (finish_node_selected) {
@@ -79,6 +358,10 @@ export default class App extends Component {
           } else {
             this.setState({grid: newGrid, finish_row: row, finish_col: col});
           }
+          document.getElementsByClassName("finish-node row")[0].value = row;
+          document.getElementsByClassName("finish-node col")[0].value = col;
+          changeRangeSlider(row, document.getElementById("range-slider-3"));
+          changeRangeSlider(col, document.getElementById("range-slider-4"));
         } 
         else if (!((row == this.state.start_row && col == this.state.start_col) || (row == this.state.finish_row && col == this.state.finish_col))) {
           const newGrid = getNewGridToggleWall(this.state.grid, row, col);
@@ -105,7 +388,7 @@ export default class App extends Component {
             const newGrid = getNewGridToggleWall(this.state.grid, row, col);
             this.setState({grid: newGrid, mouseIsPressed: true});
             // console.log("REE");
-            console.log(el);
+            // console.log(el);
           } else {
             const newGrid = getNewGridToggleWall(this.state.grid, row, col);
             this.setState({grid:newGrid, mouseIsPressed: true}, () => {
@@ -274,15 +557,13 @@ export default class App extends Component {
     }
     // this.setState({pathfinding_algorithm: "dijkstras"});
     this.setState({post_animation: true, pathfinding_algorithm: "dijkstras"});
-
-
   }
 
 
 
 
   render() {
-    const {grid, mouseIsPressed, start_row, start_col, finish_row, finish_col} = this.state;
+    const {grid, mouseIsPressed, start_row, start_col, finish_row, finish_col, row_dimension, col_dimension, pathfinding_algorithm} = this.state;
     return (
         <>
                 <Navbar handleBFS={this.visualizeBFS.bind(this)}
@@ -292,13 +573,23 @@ export default class App extends Component {
         
         <h1>{this.state.start_row}</h1>
         <Grid container
-              spacing={2}>
-            <Grid item xs={2}>
+              spacing={1}>
+            <Grid item xs={4}>
               <div className="mega-menu">
-                <ControlPanel />
+                <ControlPanel
+                  handleRangeChange={this.handleRangeChange.bind(this)}
+                  start_row={start_row}
+                  start_col={start_col}
+                  finish_row={finish_row}
+                  finish_col={finish_col}
+                  row_dimension={row_dimension}
+                  col_dimension={col_dimension}
+                  handleSlider={this.handleSlider.bind(this)}
+                  pathfinding_algorithm={pathfinding_algorithm}
+                  handleDimension={this.handleDimension.bind(this)}/>
               </div>
             </Grid>
-            <Grid item xs={8}
+            <Grid item xs={6}
                 
                   >
         <div className="grid">
@@ -417,3 +708,43 @@ const getNewGridToggleEndPoints = (grid, currentEndNode, newEndNode, endpointTyp
     return newGrid;
 
 };
+
+const changeRangeSlider = (new_dimension, domTag) => {
+    // console.log(domTag);
+    //console.log(domTag);
+    const dom_id = (domTag.id).charAt((domTag.id).length-1);
+    //console.log(`dom_id: ${dom_id}`);
+    const slider = domTag.querySelector(`.slider`);
+    const thumb = domTag.querySelector(`.slider-thumb`);
+    const tooltip = domTag.querySelector(`.tooltip`);
+    const progress = domTag.querySelector(`.progress`);
+    // domTag.value=new_dimension;
+    // console.log(new_dimension);
+    const maxVal = slider.getAttribute("max");
+    const val = (new_dimension / maxVal) * 100 + "%";
+    tooltip.innerHTML = new_dimension;
+    progress.style.width = val;
+    thumb.style.left = val;
+    slider.value = new_dimension;
+}
+
+const resizeGrid = (grid, new_row_dim, new_col_dim, old_row_dim, old_col_dim) => {
+  const newGrid = [];
+  if (new_row_dim > old_row_dim) {
+    grid.push([]);
+    for(let i = 0; i < old_col_dim; i++) {
+      grid[grid.length-1].push(createNode(i, grid.length-1, Infinity, Infinity, Infinity, Infinity));
+    }
+  } else if (new_row_dim < old_row_dim) {
+    grid.pop();
+  } else if (new_col_dim > old_col_dim) {
+    for (let i = 0; i < old_row_dim; i++) {
+      grid[i].push(createNode(grid[i].length, i, Infinity, Infinity, Infinity, Infinity));
+    }
+  } else if (new_col_dim < old_col_dim) {
+    for (let i = 0; i < grid.length; i++) {
+      grid[i].pop();
+    }
+  }
+  return grid;
+}

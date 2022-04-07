@@ -33,9 +33,9 @@ html,
   height: 100%;
 }
 
-.control-form {
+/* .control-form {
   font-family: 'Ubuntu', sans-serif;
-}
+} */
 
 .right-main {
   background-color: rgb(46, 46, 46);
@@ -92,7 +92,7 @@ html,
 @keyframes visitedAnimation {
   0% {
     transform: scale(0.3);
-    background-color: rgba(0, 0, 66, 0.75);
+    background-color: rgba(255, 67, 67, 0.75);
     border-radius: 100%;
   }
 
@@ -107,7 +107,7 @@ html,
 
   100% {
     transform: scale(1);
-    background-color: rgba(0, 190, 218, 0.75);
+    background-color: #a4fff1;
   }
 }
 
@@ -125,17 +125,17 @@ html,
 @keyframes shortestPath {
   0% {
     transform: scale(0.6);
-    background-color: rgb(209, 209, 0);
+    background-color: rgb(255, 242, 0);
   }
 
   50% {
     transform: scale(1.2);
-    background-color: rgb(255, 254, 106);
+    background-color: rgb(255, 242, 0);
   }
 
   100% {
     transform: scale(1);
-    background-color: rgb(255, 254, 106);
+    background-color: rgb(255, 242, 0);
   }
 }
 
