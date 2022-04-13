@@ -33,6 +33,27 @@ export default class App extends Component {
     this.handleDimension = this.handleDimension.bind(this);
   }
 
+  handleAlgorithmChange(e) {
+    const {pathfinding_algorithm, post_animation} = this.state;
+    console.log("Handling Algorithm Change");
+    console.log(`pathfinding_algorithm: ${pathfinding_algorithm} ---> ${(e.value).toLowerCase()}`);
+      if (post_animation) {
+        
+        this.setState({pathfinding_algorithm: (e.value).toLowerCase()}, () => {
+          if ((e.value).toLowerCase() === "bfs") {
+            console.log("BFS");
+            this.visualizeBFS();
+          } else if ((e.value).toLowerCase() === "dijkstras") {
+            console.log("DIJKSTRAS");
+            this.visualizeDijkstras();
+          }
+        });
+  
+      }else {
+        this.setState({pathfinding_algorithm: (e.value).toLowerCase()});
+      }
+  }
+
   handleRangeChange(e){
 
     const {grid, start_row, start_col, finish_row, finish_col, post_animation, pathfinding_algorithm} = this.state;
@@ -310,6 +331,16 @@ export default class App extends Component {
     const {start_node_selected, post_animation, finish_node_selected, pathfinding_algorithm} = this.state;
     // console.log(`start_node_selected: ${start_node_selected}\npost_animation: ${post_animation}\nfinish_node_selected: ${finish_node_selected}\npathfinding_algorithm: ${pathfinding_algorithm}`);
     const current = this.state.grid[row][col];
+
+    if (post_animation) {
+      let elementHTML =document.getElementsByClassName("node-visited");
+      // console.log(elementHTML);
+      for (const elHTML of elementHTML) {
+        elHTML.style.animation = "none";
+        elHTML.offSetHeight;
+        elHTML.style.animation = null;
+      }
+    }
     if (!this.state.mouseIsPressed) return;
 
         wallbreaker: if (start_node_selected) {
@@ -320,6 +351,7 @@ export default class App extends Component {
           // this.setState({grid: newGrid, start_row: row, start_col: col});
 
           if (post_animation) {
+
                 this.setState({grid: newGrid, start_row: row, start_col: col}, () => {
                   if (pathfinding_algorithm === "bfs") {
                     this.visualizeBFS();
@@ -530,7 +562,8 @@ export default class App extends Component {
       this.animateAlgorithmInstant(node_order, shortest_path_order);
     }
     // this.setState({pathfinding_algorithm: "bfs"});
-    this.setState({post_animation: true, pathfinding_algorithm: "bfs"});
+    this.setState({post_animation: true});
+    // this.setState({post_animation: true, pathfinding_algorithm: "bfs"});
   }
 
   visualizeDijkstras() {
@@ -556,9 +589,17 @@ export default class App extends Component {
       this.animateAlgorithmInstant(node_order, shortest_path_order);
     }
     // this.setState({pathfinding_algorithm: "dijkstras"});
-    this.setState({post_animation: true, pathfinding_algorithm: "dijkstras"});
+    this.setState({post_animation: true});
+    // this.setState({post_animation: true, pathfinding_algorithm: "dijkstras"});
   }
 
+  
+  handleClearGrid() {
+    // console.log("clear grid");
+    const {grid, start_row, start_col, finish_row, finish_col, row_dimension, col_dimension} = this.state;
+    const newGrid = clearGrid(grid, start_row, start_col, finish_row, finish_col, row_dimension, col_dimension);
+    this.setState({grid:newGrid, post_animation: false});
+  }
 
 
 
@@ -573,7 +614,7 @@ export default class App extends Component {
         
         <h1>{this.state.start_row}</h1>
         <Grid container
-              spacing={1}>
+              spacing={4}>
             <Grid item xs={4}>
               <div className="mega-menu">
                 <ControlPanel
@@ -586,43 +627,52 @@ export default class App extends Component {
                   col_dimension={col_dimension}
                   handleSlider={this.handleSlider.bind(this)}
                   pathfinding_algorithm={pathfinding_algorithm}
-                  handleDimension={this.handleDimension.bind(this)}/>
+                  handleDimension={this.handleDimension.bind(this)}
+                  handleBFS={this.visualizeBFS.bind(this)}
+                  handleDijkstras={this.visualizeDijkstras.bind(this)}
+                  handleAlgorithmChange={this.handleAlgorithmChange.bind(this)}
+                  handleClearGrid={this.handleClearGrid.bind(this)}
+                  />
               </div>
             </Grid>
-            <Grid item xs={6}
+            <Grid item xs={8}
                 
                   >
-        <div className="grid">
-          {grid.map((row, rowIdx) => {
-            return (
-              <div key={rowIdx}>
-                {row.map((node, nodeIdx) => {
-                  const {row, col, isFinish, isStart, isWall} = node;
+        <div className="grid-container">
+            <div className="grid-centered">
+              <div className="grid">
+                {grid.map((row, rowIdx) => {
                   return (
-                    <Node
-                      key={nodeIdx}
-                      col={col}
-                      isFinish={isFinish}
-                      isStart={isStart}
-                      isWall={isWall}
-                      mouseIsPressed={mouseIsPressed}
-                      onMouseDown={(row, col, el, mystyle) => this.handleMouseDown(row, col, el,mystyle)}
-                      onMouseEnter={(row, col, el) =>
-                        this.handleMouseEnter(row, col, el)
-                      }
-                      onMouseLeave={(row, col) =>
-                        this.handleMouseLeave(row, col)
-                      }
-                      onMouseUp={() => this.handleMouseUp()}
-                      row={row}></Node>
+                    <div key={rowIdx}>
+                      {row.map((node, nodeIdx) => {
+                        const {row, col, isFinish, isStart, isWall} = node;
+                        return (
+                          <Node
+                            key={nodeIdx}
+                            col={col}
+                            isFinish={isFinish}
+                            isStart={isStart}
+                            isWall={isWall}
+                            mouseIsPressed={mouseIsPressed}
+                            onMouseDown={(row, col, el, mystyle) => this.handleMouseDown(row, col, el,mystyle)}
+                            onMouseEnter={(row, col, el) =>
+                              this.handleMouseEnter(row, col, el)
+                            }
+                            onMouseLeave={(row, col) =>
+                              this.handleMouseLeave(row, col)
+                            }
+                            onMouseUp={() => this.handleMouseUp()}
+                            row={row}></Node>
+                        );
+                      })}
+                    </div>
                   );
                 })}
               </div>
-            );
-          })}
+            </div>
         </div>
         </Grid>
-        <Grid item xs={2}><div className="right-main"><h1>hi</h1></div></Grid>
+        
             
         </Grid>
         </>
@@ -729,7 +779,7 @@ const changeRangeSlider = (new_dimension, domTag) => {
 }
 
 const resizeGrid = (grid, new_row_dim, new_col_dim, old_row_dim, old_col_dim) => {
-  const newGrid = [];
+
   if (new_row_dim > old_row_dim) {
     grid.push([]);
     for(let i = 0; i < old_col_dim; i++) {
@@ -747,4 +797,28 @@ const resizeGrid = (grid, new_row_dim, new_col_dim, old_row_dim, old_col_dim) =>
     }
   }
   return grid;
+}
+
+const clearGrid = (grid, start_row, start_col, finish_row, finish_col, row_dim, col_dim) => {
+
+  grid.map( function(row) {
+    return row.map( function (cell ) {
+      if (document.getElementById(`node-${cell.row}-${cell.col}`).className ===
+        'node node-visited' || document.getElementById(`node-${cell.row}-${cell.col}`).className ===
+        'node node-shortest-path') {
+          document.getElementById(`node-${cell.row}-${cell.col}`).className =
+          'node ';
+        }
+      cell.previousNode = null;
+      cell.isVisited = false;
+      cell.isWall = false;
+      cell.distance = Infinity;
+      return;
+    })
+  })
+  grid[start_row][start_col].isStart = true;
+  grid[finish_row][finish_col].isFinish = true;
+
+  return grid;
+
 }

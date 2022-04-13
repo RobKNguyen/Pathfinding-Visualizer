@@ -1,12 +1,11 @@
 /* Below deals with The Control Panel */
 .mega-menu {
-    color: white;
     font-family: 'Ubuntu';
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 10px;
-    background: linear-gradient(180deg, #a4fff1, #252525);
+    /*background: linear-gradient(180deg, #a4fff1, #252525);*/
 }
 
 .container {
@@ -19,6 +18,7 @@
 }
 
 .container .title {
+    color: white;
     font-size: 25px;
     font-weight: 500;
     position: relative;
@@ -69,6 +69,10 @@ form .user-details .input-box {
     text-align: center;
 }
 
+.user-details .input-box .value-slider .details{
+    color: white;
+}
+
 .user-details .input-box .start-node {
     width: 10%;
     height: 35px;
@@ -108,6 +112,7 @@ form .user-details .input-box {
 }
 
 .user-details .input-box .grid-dimension{
+    color: black;
     height: 35px;
     width: 25%;
     outline: none;
@@ -123,12 +128,17 @@ form .user-details .input-box {
     border-color: #abffc0;
 }
 
+.user-details .input-box .details{
+    color: white;
+}
+
 form .algorithm-details .algorithm-title{
     font-size: 20px;
     font-weight: 500;
 }
 
 form .algorithm-details .algorithm-type{
+    color: white;
     display: flex;
     width: 80%;
     margin: 14px 0;
@@ -172,17 +182,20 @@ form .button input{
     width: 100%;
     outline-color: none;
     color: #fff;
-    border: none;
+    border-radius: 7px;
     font-size: 18px;
     font-weight: 500;
     border-radius: 5px;
     letter-spacing: 1px;
-    background: linear-gradient(135deg, #ffffff, #252525);
+    background-color: #252525;
+    /* background: linear-gradient(135deg, #ffffff, #252525); */
 }
 
 form .button input:hover{
-    background: linear-gradient(-135deg, #ffffff, #252525);
+    filter: brightness(140%);
     cursor: pointer;
+    /* background: linear-gradient(-135deg, #ffffff, #252525);
+    cursor: pointer; */
 }
 
 @media (max-width: 1584px) {
@@ -323,11 +336,12 @@ form .button input:hover{
 }
 /* Increase Decrease Button: */
 .value-button {
+    color: white;
     display: inline-block;
     border: 1px solid #2f2f2f;
     border-radius: 5px;
     margin: 0px;
-    width: 40px;
+    width: 35px;
     height: 20px;
     text-align: center;
     vertical-align: middle;
@@ -343,6 +357,9 @@ form .button input:hover{
   
   .value-button:hover {
     cursor: pointer;
+    filter: brightness(140%);
+    cursor: pointer;
+    
   }
   
   form #decrease {
@@ -375,3 +392,33 @@ form .button input:hover{
       -webkit-appearance: none;
       margin: 0;
   }
+
+/* Clear Button */
+.clear-grid-button {
+    margin-top: 25px;
+    height: 45px;
+    color: white;
+    width: 45%;
+    display: grid;
+    justify-content: center;
+
+  /* background: linear-gradient(135deg, #ffffff, #252525); */
+  background: #252525;
+  border-radius: 7px;
+  -webkit-box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+          box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+  /* padding: 0 20px; */
+}
+
+.clear-grid-button:hover {
+    filter: brightness(140%);
+    cursor: pointer;
+}
+
+.half-flex-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}

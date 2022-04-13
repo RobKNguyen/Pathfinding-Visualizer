@@ -1,4 +1,5 @@
 import React, { Component} from "react";
+import Dropdown from "./Dropdown";
 
 const MAX_ROW = 30;
 const MAX_COL = 50;
@@ -11,7 +12,6 @@ export default class ControlPanel extends Component {
         constructor(props) {
             super(props);
         }
-        
         
 
         handleEnterSliderThumb(e) {
@@ -54,6 +54,8 @@ export default class ControlPanel extends Component {
                 })
             }
         }
+
+        
 
         increaseValue(e, dimension_cap) {
             const index = (e.currentTarget.id).charAt((e.currentTarget.id).length - 1);
@@ -100,7 +102,11 @@ export default class ControlPanel extends Component {
                 col_dimension,
                 handleSlider,
                 pathfinding_algorithm,
-                handleDimension
+                handleDimension,
+                handleBFS,
+                handleDijkstras,
+                handleAlgorithmChange,
+                handleClearGrid
             } = this.props;
             return (
                 <>
@@ -108,7 +114,7 @@ export default class ControlPanel extends Component {
                     <div className="title">Control Panel</div>
                     <form action="#">
                         <div className="user-details">
-
+                        <div className="half-flex-container">
                         <div className="input-box">
                                 <div className="value-slider">
                                     <div className="vertical-flex">
@@ -132,9 +138,11 @@ export default class ControlPanel extends Component {
                                 </div>
                                 
                             </div>
-                            <div className="input-box">
-                                <span className="details">Full Name</span>
-                                <input type="text" placeholder="Enter your name" required className="input-text" />
+
+
+                            <div className="clear-grid-button" onClick={() => handleClearGrid()}>
+                                <p>Clear Grid</p>
+                            </div>
                             </div>
 
                             <div className="input-box">
@@ -207,17 +215,24 @@ export default class ControlPanel extends Component {
 
                             
 
+                            <div className="dropdown-box">
+                                <div className="dropdown-button">
+                                <Dropdown
+                                    title={pathfinding_algorithm}
+                                    items={items}
+                                    pathfinding_algorithm={pathfinding_algorithm}
+                                    handleAlgorithmChange={handleAlgorithmChange}
+                                    />
+                                </div>
+                            </div>
+
                             <div className="input-box">
                                 <span className="details">Full Name</span>
-                                <input type="text" placeholder="Enter your name" required  className="input-text"/>
+                                <input type="text" placeholder="Enter your name"  className="input-text" />
                             </div>
                             <div className="input-box">
                                 <span className="details">Full Name</span>
-                                <input type="text" placeholder="Enter your name" required className="input-text" />
-                            </div>
-                            <div className="input-box">
-                                <span className="details">Full Name</span>
-                                <input type="text" placeholder="Enter your name" required className="input-text" />
+                                <input type="text" placeholder="Enter your name"  className="input-text" />
                             </div>
                         </div>
                         <div className="algorithm-details">
@@ -242,13 +257,29 @@ export default class ControlPanel extends Component {
                         </div>
 
                         <div className="button">
-                            <input type="submit" value={pathfinding_algorithm}></input>
+                            <input type="submit" value={`ANIMATE ${pathfinding_algorithm.toUpperCase()}`} onClick={() => {(pathfinding_algorithm === "bfs" ? handleBFS() : handleDijkstras())}}></input>
                         </div>
                     </form>
 
                 </div>
+                
                 </>
             );
         }
 
 }
+
+const items = [
+    {
+        id: 1,
+        value: 'BFS'
+    },
+    {
+        id: 2,
+        value: "DFS"
+    },
+    {
+        id: 3,
+        value: "Dijkstras"
+    }
+]
