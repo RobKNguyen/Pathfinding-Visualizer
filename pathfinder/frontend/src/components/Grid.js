@@ -6,6 +6,8 @@ import Navbar from './Menu/Navbar';
 import ControlPanel from './Menu/ControlPanel';
 import { BFS, getShortestPathBFS } from './Algorithms/BFS';
 import { dijkstras, getShortestPathDijkstras } from './Algorithms/Dijkstras';
+import { DFS, getShortestPathDFS } from './Algorithms/DFS';
+import { MazeDFS } from './Algorithms/MazeDFS';
 import { Grid } from '@mui/material';
 //import { render } from "react-dom";
 
@@ -25,7 +27,8 @@ export default class App extends Component {
         post_animation: false,
         pathfinding_algorithm: "bfs",
         row_dimension: 25,
-        col_dimension: 50
+        col_dimension: 40,
+        maze_algorithm: 'dfs'
     };
 
     this.handleRangeChange = this.handleRangeChange.bind(this);
@@ -46,11 +49,38 @@ export default class App extends Component {
           } else if ((e.value).toLowerCase() === "dijkstras") {
             console.log("DIJKSTRAS");
             this.visualizeDijkstras();
+          } else if ((e.value).toLowerCase() === "dfs") {
+            console.log("DFS");
+            this.visualizeDFS();
           }
         });
   
       }else {
         this.setState({pathfinding_algorithm: (e.value).toLowerCase()});
+      }
+  }
+
+  handleMazeAlgorithmChange(e) {
+    const {maze_algorithm, post_animation} = this.state;
+    console.log("Handling Maze Algorithm Change");
+    console.log(`pathfinding_algorithm: ${maze_algorithm} ---> ${(e.value).toLowerCase()}`);
+      if (post_animation) {
+        
+        this.setState({maze_algorithm: (e.value).toLowerCase()}, () => {
+          if ((e.value).toLowerCase() === "bfs") {
+            console.log("BFS");
+            this.visualizeBFS();
+          } else if ((e.value).toLowerCase() === "dijkstras") {
+            console.log("DIJKSTRAS");
+            this.visualizeDijkstras();
+          } else if ((e.value).toLowerCase() === "dfs") {
+            console.log("DFS");
+            this.visualizeDFS();
+          }
+        });
+  
+      }else {
+        this.setState({maze_algorithm: (e.value).toLowerCase()});
       }
   }
 
@@ -91,6 +121,8 @@ export default class App extends Component {
           this.visualizeBFS();
         } else if (pathfinding_algorithm === "dijkstras") {
           this.visualizeDijkstras();
+        } else if (pathfinding_algorithm === "dfs") {
+          this.visualizeDijkstras();
         }
       });
 
@@ -113,6 +145,8 @@ export default class App extends Component {
           this.visualizeBFS();
         } else if (pathfinding_algorithm === "dijkstras") {
           this.visualizeDijkstras();
+        } else if (pathfinding_algorithm === "dfs") {
+          this.visualizeDFS();
         }
       });
     } else {
@@ -135,6 +169,8 @@ export default class App extends Component {
             this.visualizeBFS();
           } else if (pathfinding_algorithm === "dijkstras") {
             this.visualizeDijkstras();
+          } else if (pathfinding_algorithm === "dfs") {
+            this.visualizeDFS();
           }
         });
       } else {
@@ -156,6 +192,8 @@ export default class App extends Component {
             this.visualizeBFS();
           } else if (pathfinding_algorithm === "dijkstras") {
             this.visualizeDijkstras();
+          } else if (pathfinding_algorithm === "dfs") {
+            this.visualizeDFS();
           }
         });
       } else {
@@ -194,6 +232,8 @@ export default class App extends Component {
             this.visualizeBFS();
           } else if (pathfinding_algorithm === "dijkstras") {
             this.visualizeDijkstras();
+          } else if (pathfinding_algorithm === "dfs") {
+            this.visualizeDFS();
           }
         });
       } else {
@@ -223,6 +263,8 @@ export default class App extends Component {
             this.visualizeBFS();
           } else if (pathfinding_algorithm === "dijkstras") {
             this.visualizeDijkstras();
+          } else if (pathfinding_algorithm === "dfs") {
+            this.visualizeDFS();
           }
         });
       } else {
@@ -250,6 +292,8 @@ export default class App extends Component {
                     this.visualizeBFS();
                   } else if (pathfinding_algorithm === "dijkstras") {
                     this.visualizeDijkstras();
+                  } else if (pathfinding_algorithm === "dfs") {
+                    this.visualizeDFS();
                   }
                 });
           } else {
@@ -274,6 +318,8 @@ export default class App extends Component {
                     this.visualizeBFS();
                   } else if (pathfinding_algorithm === "dijkstras") {
                     this.visualizeDijkstras();
+                  } else if (pathfinding_algorithm === "dfs") {
+                    this.visualizeDFS();
                   }
                 });
           } else {
@@ -294,6 +340,8 @@ export default class App extends Component {
                     this.visualizeBFS();
                   } else if (pathfinding_algorithm === "dijkstras") {
                     this.visualizeDijkstras();
+                  } else if (pathfinding_algorithm === "dfs") {
+                    this.visualizeDFS();
                   }
                 });
           } else {
@@ -315,6 +363,8 @@ export default class App extends Component {
                     this.visualizeBFS();
                   } else if (pathfinding_algorithm === "dijkstras") {
                     this.visualizeDijkstras();
+                  } else if (pathfinding_algorithm === "dfs") {
+                    this.visualizeDFS();
                   }
                 });
           } else {
@@ -357,6 +407,8 @@ export default class App extends Component {
                     this.visualizeBFS();
                   } else if (pathfinding_algorithm === "dijkstras") {
                     this.visualizeDijkstras();
+                  } else if (pathfinding_algorithm === "dfs") {
+                    this.visualizeDFS();
                   }
                 });
           } else {
@@ -385,6 +437,8 @@ export default class App extends Component {
                 this.visualizeBFS();
               } else if (pathfinding_algorithm === "dijkstras") {
                 this.visualizeDijkstras();
+              } else if (pathfinding_algorithm === "dfs") {
+                this.visualizeDFS();
               }
             });
           } else {
@@ -404,6 +458,8 @@ export default class App extends Component {
                 this.visualizeBFS();
               } else if (pathfinding_algorithm === "dijkstras") {
                 this.visualizeDijkstras();
+              } else if (pathfinding_algorithm === "dfs") {
+                this.visualizeDFS();
               }
             });
           } else{
@@ -414,8 +470,9 @@ export default class App extends Component {
   }
 
   handleMouseDown(row, col, el) {
+    const { start_row, start_col, finish_row, finish_col, pathfinding_algorithm } = this.state;
     // If before animation:
-        if (!((row == this.state.start_row && col == this.state.start_col) || (row == this.state.finish_row && col == this.state.finish_col))) {
+        if (!((row == start_row && col == start_col) || (row == finish_row && col == finish_col))) {
           if (!this.state.post_animation) {
             const newGrid = getNewGridToggleWall(this.state.grid, row, col);
             this.setState({grid: newGrid, mouseIsPressed: true});
@@ -428,6 +485,8 @@ export default class App extends Component {
                 this.visualizeBFS();
               } else if (this.state.pathfinding_algorithm === "dijkstras") {
                 this.visualizeDijkstras();
+              } else if (pathfinding_algorithm === "dfs") {
+                this.visualizeDFS();
               }
           });
           }
@@ -593,6 +652,48 @@ export default class App extends Component {
     // this.setState({post_animation: true, pathfinding_algorithm: "dijkstras"});
   }
 
+  visualizeDFS() {
+    const { grid, mouseIsPressed, start_row, start_col, finish_row, finish_col} = this.state;
+    grid.map( function(row) {
+      return row.map( function (cell ) {
+        cell.previousNode = null;
+        cell.isVisited = false;
+        cell.distance = Infinity;
+        return;
+      })
+    });
+
+    const start_node = grid[start_row][start_col];
+    const finish_node = grid[finish_row][finish_col];
+    const node_order = DFS(grid, start_node, finish_node);
+    const shortest_path_order = getShortestPathDFS(finish_node);
+    if (!this.state.post_animation) {
+      this.animateAlgorithm(node_order, shortest_path_order);
+    } else {
+
+      this.animateAlgorithmInstant(node_order, shortest_path_order);
+    }
+    this.setState({post_animation: true});
+
+  }
+
+  visualizeMazeDFS() {
+    const { grid, mouseIsPressed, start_row, start_col, finish_row, finish_col} = this.state;
+    grid.map( function(row) {
+      return row.map( function (cell ) {
+        cell.previousNode = null;
+        cell.isVisited = false;
+        cell.distance = Infinity;
+        return;
+      })
+    });
+
+    const start_node = grid[start_row][start_col];
+    const finish_node = grid[finish_row][finish_col];
+    const maze = MazeDFS(grid, start_node, finish_node);
+    this.setState({grid: maze, start_row: 1, start_col: 1, finish_row: grid.length-2, finish_col: grid[0].length -2});
+  }
+
   
   handleClearGrid() {
     // console.log("clear grid");
@@ -604,17 +705,18 @@ export default class App extends Component {
 
 
   render() {
-    const {grid, mouseIsPressed, start_row, start_col, finish_row, finish_col, row_dimension, col_dimension, pathfinding_algorithm} = this.state;
+    const {grid, mouseIsPressed, start_row, start_col, finish_row, finish_col, row_dimension, col_dimension, pathfinding_algorithm, maze_algorithm} = this.state;
     return (
         <>
-                <Navbar handleBFS={this.visualizeBFS.bind(this)}
-                handleDijkstras={this.visualizeDijkstras.bind(this)}
-
-                 />
+                
         
-        <h1>{this.state.start_row}</h1>
+        
         <Grid container
-              spacing={4}>
+              spacing={4}
+              direction="row"
+              justifyContent="center"
+            >
+              
             <Grid item xs={4}>
               <div className="mega-menu">
                 <ControlPanel
@@ -632,6 +734,10 @@ export default class App extends Component {
                   handleDijkstras={this.visualizeDijkstras.bind(this)}
                   handleAlgorithmChange={this.handleAlgorithmChange.bind(this)}
                   handleClearGrid={this.handleClearGrid.bind(this)}
+                  handleDFS={this.visualizeDFS.bind(this)}
+                  handleMazeDFS={this.visualizeMazeDFS.bind(this)}
+                  handleMazeAlgorithmChange={this.handleMazeAlgorithmChange.bind(this)}
+                  maze_algorithm={maze_algorithm}
                   />
               </div>
             </Grid>

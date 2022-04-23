@@ -8,9 +8,14 @@
     width: 100%; /* Can be in percentage also. */
     height: auto;
     margin: 0 auto;
-    padding: 10px;
     position: relative;
+    text-align: center;
 }
+
+.dropdown-box .dropdown-button .details {
+  font-size: 20px;
+}
+
 .dd-wrapper {
     justify-content: center;
     align-items: center;

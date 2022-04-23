@@ -1,5 +1,6 @@
 import React, { Component} from "react";
 import Dropdown from "./Dropdown";
+import MazeDropdown from "./MazeDropdown";
 
 const MAX_ROW = 30;
 const MAX_COL = 50;
@@ -106,7 +107,11 @@ export default class ControlPanel extends Component {
                 handleBFS,
                 handleDijkstras,
                 handleAlgorithmChange,
-                handleClearGrid
+                handleClearGrid,
+                handleDFS,
+                handleMazeDFS,
+                handleMazeAlgorithmChange,
+                maze_algorithm
             } = this.props;
             return (
                 <>
@@ -217,6 +222,7 @@ export default class ControlPanel extends Component {
 
                             <div className="dropdown-box">
                                 <div className="dropdown-button">
+                                <span className="details">Search Algorithm</span>
                                 <Dropdown
                                     title={pathfinding_algorithm}
                                     items={items}
@@ -226,39 +232,31 @@ export default class ControlPanel extends Component {
                                 </div>
                             </div>
 
-                            <div className="input-box">
-                                <span className="details">Full Name</span>
-                                <input type="text" placeholder="Enter your name"  className="input-text" />
-                            </div>
-                            <div className="input-box">
-                                <span className="details">Full Name</span>
-                                <input type="text" placeholder="Enter your name"  className="input-text" />
-                            </div>
-                        </div>
-                        <div className="algorithm-details">
-                            <input type="radio" name="gender" id="dot-1" />
-                            <input type="radio" name="gender" id="dot-2" />
-                            <input type="radio" name="gender" id="dot-3" />
-                            <span className="algorithm-title">Gender</span>
-                            <div className="algorithm-type">
-                                <label htmlFor="dot-1">
-                                    <span className="dot one"></span>
-                                    <span className="algoirthm">BFS</span>
-                                </label>
-                                <label htmlFor="dot-2">
-                                    <span className="dot two"></span>
-                                    <span className="algoirthm">BFS</span>
-                                </label>
-                                <label htmlFor="dot-3">
-                                    <span className="dot three"></span>
-                                    <span className="algoirthm">BFS</span>
-                                </label>
-                            </div>
-                        </div>
 
-                        <div className="button">
-                            <input type="submit" value={`ANIMATE ${pathfinding_algorithm.toUpperCase()}`} onClick={() => {(pathfinding_algorithm === "bfs" ? handleBFS() : handleDijkstras())}}></input>
+                            <div className="button">
+                                <input type="submit" value={`ANIMATE ${pathfinding_algorithm.toUpperCase()}`} onClick={() => {(pathfinding_algorithm === "bfs" ? handleBFS() : (pathfinding_algorithm === "dijkstras") ? handleDijkstras() : handleDFS())}}></input>
+                            </div>
+
+                            <div className="dropdown-box">
+                                <div className="dropdown-button">
+                                <span className="details">Random Maze Algorithm</span>
+                                <MazeDropdown
+                                    title={maze_algorithm}
+                                    items={maze_items}
+                                    maze_algorithm={maze_algorithm}
+                                    handleMazeAlgorithmChange={handleMazeAlgorithmChange}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="button">
+                                <input type="submit" value={`GENERATE ${maze_algorithm.toUpperCase()}`} onClick={() => {(maze_algorithm === "dfs" ? handleMazeDFS() : handleMazeDFS())}}></input>
+                            </div>
+
                         </div>
+                        
+
+                        
                     </form>
 
                 </div>
@@ -281,5 +279,20 @@ const items = [
     {
         id: 3,
         value: "Dijkstras"
+    }
+]
+
+const maze_items = [
+    {
+        id: 1,
+        value: 'DFS'
+    },
+    {
+        id: 2,
+        value: "Recursive Division"
+    },
+    {
+        id: 3,
+        value: "Search and Kill"
     }
 ]
