@@ -1,12 +1,5 @@
-import { withEmotionCache } from "@emotion/react";
-
 export function MazeDFS(grid, start_node, finish_node) {
 
-    // visited.push(start_node);
-    // start_node.isVisited=true;
-    // const directions = [[0,-1], [-1,0], [0,1], [1,0]];
-    // const x = current.row;
-    // const y = current.col;
     grid.map( function(row) {
         return row.map( function (cell ) {
           
@@ -32,7 +25,7 @@ export function MazeDFS(grid, start_node, finish_node) {
     while(node_stack.length != 0) {
         const curr = node_stack[node_stack.length - 1];
         curr.isWall = false;
-        console.log(`current: (${curr.row}, ${curr.col})`);
+        // console.log(`current: (${curr.row}, ${curr.col})`);
         node_stack.pop();
         visited.push(curr);
         let neighbors = getNeighbors(grid, curr, visited, finish_node);
@@ -58,6 +51,7 @@ export function MazeDFS(grid, start_node, finish_node) {
             // console.log(node_stack);
             const in_between = fill_in_between(grid, curr, neighbors[random_int]);
             grid[in_between.row][in_between.col].isWall=false;
+            visited.push(grid[in_between.row][in_between.col]);
             if (node_stack.includes(neighbors[random_int])){
                 node_stack.splice(node_stack.indexOf(neighbors[random_int]), 1);
             }
@@ -74,30 +68,30 @@ export function MazeDFS(grid, start_node, finish_node) {
             // console.log(node_stack[node_stack.length-2]);
 
             let counter = visited.length-1;
-            console.log(`visited[counter]: (${visited[counter].row}, ${visited[counter].col}) `);
-            console.log(visited[counter]);
+            //console.log(`visited[counter]: (${visited[counter].row}, ${visited[counter].col}) `);
+            //console.log(visited[counter]);
             while (counter > 0) {
-                console.log(`counter: ${counter}`);
+                // console.log(`counter: ${counter}`);
                 let bt_neighbors = getNeighbors(grid, visited[counter], visited, finish_node);
                 if (bt_neighbors.includes(node_stack[node_stack.length-1])) {
-                    console.log(`linked: ${visited[counter]} to ${node_stack[node_stack.length-1]}`);
+                    // console.log(`linked: ${visited[counter]} to ${node_stack[node_stack.length-1]}`);
                     const bt_between = fill_in_between(grid, visited[counter], node_stack[node_stack.length-1]);
                     grid[bt_between.row][bt_between.col].isWall=false;
+                    visited.push(grid[bt_between.row][bt_between.col]);
                     break;
                 }
                 counter--;
                 //break;
             }
-            // for (const bt_neighbor of bt_neighbors) {
-            //     console.log(`neighbor: (${bt_neighbor.row}, ${bt_neighbor.col})`);
-            // }
             
                 
                 
         }
     }
-
-    return grid;
+    for (const item of visited) {
+        console.log(`visited: (${item.row}, ${item.col})`)
+    }
+    return [grid, visited];
 }
 
 function fill_in_between(grid, current, neighbor) {

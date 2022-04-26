@@ -2,10 +2,10 @@ import React, { Component} from "react";
 import Dropdown from "./Dropdown";
 import MazeDropdown from "./MazeDropdown";
 
-const MAX_ROW = 30;
-const MAX_COL = 50;
-const MIN_ROW = 15;
-const MIN_COL = 15;
+const MAX_ROW = 80;
+const MAX_COL = 80;
+const MIN_ROW = 5;
+const MIN_COL = 5;
 
 export default class ControlPanel extends Component {
 
@@ -111,7 +111,9 @@ export default class ControlPanel extends Component {
                 handleDFS,
                 handleMazeDFS,
                 handleMazeAlgorithmChange,
-                maze_algorithm
+                maze_algorithm,
+                handleMazeKruskals,
+                handleAStar
             } = this.props;
             return (
                 <>
@@ -234,7 +236,7 @@ export default class ControlPanel extends Component {
 
 
                             <div className="button">
-                                <input type="submit" value={`ANIMATE ${pathfinding_algorithm.toUpperCase()}`} onClick={() => {(pathfinding_algorithm === "bfs" ? handleBFS() : (pathfinding_algorithm === "dijkstras") ? handleDijkstras() : handleDFS())}}></input>
+                                <input type="submit" value={`ANIMATE ${pathfinding_algorithm.toUpperCase()}`} onClick={() => {(pathfinding_algorithm === "bfs" ? handleBFS() : (pathfinding_algorithm === "dijkstras") ? handleDijkstras() : (pathfinding_algorithm === "astar") ? handleAStar() : handleDFS())}}></input>
                             </div>
 
                             <div className="dropdown-box">
@@ -250,7 +252,7 @@ export default class ControlPanel extends Component {
                             </div>
 
                             <div className="button">
-                                <input type="submit" value={`GENERATE ${maze_algorithm.toUpperCase()}`} onClick={() => {(maze_algorithm === "dfs" ? handleMazeDFS() : handleMazeDFS())}}></input>
+                                <input type="submit" value={`GENERATE ${maze_algorithm.toUpperCase()}`} onClick={() => {(maze_algorithm === "dfs" ? handleMazeDFS() : (maze_algorithm === "kruskals") ? handleMazeKruskals() : handleMazeKruskals())}}></input>
                             </div>
 
                         </div>
@@ -279,20 +281,28 @@ const items = [
     {
         id: 3,
         value: "Dijkstras"
+    },
+    {
+        id: 4,
+        value: "AStar"
     }
 ]
 
 const maze_items = [
     {
         id: 1,
-        value: 'DFS'
+        value: 'Kruskals'
     },
     {
         id: 2,
-        value: "Recursive Division"
+        value: "DFS"
     },
     {
         id: 3,
+        value: "Recursive Division"
+    },
+    {
+        id: 4,
         value: "Search and Kill"
     }
 ]

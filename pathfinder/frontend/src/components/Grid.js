@@ -8,7 +8,10 @@ import { BFS, getShortestPathBFS } from './Algorithms/BFS';
 import { dijkstras, getShortestPathDijkstras } from './Algorithms/Dijkstras';
 import { DFS, getShortestPathDFS } from './Algorithms/DFS';
 import { MazeDFS } from './Algorithms/MazeDFS';
+import { MazeKruskals } from './Algorithms/MazeKruskals';
+import { A_STAR, getShortestPathAStar } from './Algorithms/AStar';
 import { Grid } from '@mui/material';
+import { grid } from "@mui/system";
 //import { render } from "react-dom";
 
 
@@ -20,15 +23,16 @@ export default class App extends Component {
         mouseIsPressed: false,
         start_row: 2,
         start_col: 5,
-        finish_row: 7,
-        finish_col: 20,
+        finish_row: 30,
+        finish_col: 40,
         start_node_selected: false,
         finish_node_selected:false,
         post_animation: false,
         pathfinding_algorithm: "bfs",
-        row_dimension: 25,
-        col_dimension: 40,
-        maze_algorithm: 'dfs'
+        row_dimension: 41,
+        col_dimension: 51,
+        maze_algorithm: 'kruskals',
+        maze_post_animation: false
     };
 
     this.handleRangeChange = this.handleRangeChange.bind(this);
@@ -52,6 +56,9 @@ export default class App extends Component {
           } else if ((e.value).toLowerCase() === "dfs") {
             console.log("DFS");
             this.visualizeDFS();
+          } else if ((e.value).toLowerCase() === "astar") {
+            console.log("AStar")
+            this.visualizeAStar();
           }
         });
   
@@ -76,6 +83,9 @@ export default class App extends Component {
           } else if ((e.value).toLowerCase() === "dfs") {
             console.log("DFS");
             this.visualizeDFS();
+          } else if ((e.value).toLowerCase() === "astar") {
+            console.log("AStar")
+            this.visualizeAStar();
           }
         });
   
@@ -123,6 +133,8 @@ export default class App extends Component {
           this.visualizeDijkstras();
         } else if (pathfinding_algorithm === "dfs") {
           this.visualizeDijkstras();
+        } else if (pathfinding_algorithm === "astar") {
+          this.visualizeAStar();
         }
       });
 
@@ -147,6 +159,8 @@ export default class App extends Component {
           this.visualizeDijkstras();
         } else if (pathfinding_algorithm === "dfs") {
           this.visualizeDFS();
+        } else if (pathfinding_algorithm === "astar") {
+          this.visualizeAStar();
         }
       });
     } else {
@@ -171,6 +185,8 @@ export default class App extends Component {
             this.visualizeDijkstras();
           } else if (pathfinding_algorithm === "dfs") {
             this.visualizeDFS();
+          } else if (pathfinding_algorithm === "astar") {
+            this.visualizeAStar();
           }
         });
       } else {
@@ -194,6 +210,8 @@ export default class App extends Component {
             this.visualizeDijkstras();
           } else if (pathfinding_algorithm === "dfs") {
             this.visualizeDFS();
+          } else if (pathfinding_algorithm === "astar") {
+            this.visualizeAStar();
           }
         });
       } else {
@@ -234,6 +252,8 @@ export default class App extends Component {
             this.visualizeDijkstras();
           } else if (pathfinding_algorithm === "dfs") {
             this.visualizeDFS();
+          } else if (pathfinding_algorithm === "astar") {
+            this.visualizeAStar();
           }
         });
       } else {
@@ -265,6 +285,8 @@ export default class App extends Component {
             this.visualizeDijkstras();
           } else if (pathfinding_algorithm === "dfs") {
             this.visualizeDFS();
+          } else if (pathfinding_algorithm === "astar") {
+            this.visualizeAStar();
           }
         });
       } else {
@@ -294,6 +316,8 @@ export default class App extends Component {
                     this.visualizeDijkstras();
                   } else if (pathfinding_algorithm === "dfs") {
                     this.visualizeDFS();
+                  } else if (pathfinding_algorithm === "astar") {
+                    this.visualizeAStar();
                   }
                 });
           } else {
@@ -320,6 +344,8 @@ export default class App extends Component {
                     this.visualizeDijkstras();
                   } else if (pathfinding_algorithm === "dfs") {
                     this.visualizeDFS();
+                  } else if (pathfinding_algorithm === "astar") {
+                    this.visualizeAStar();
                   }
                 });
           } else {
@@ -342,6 +368,8 @@ export default class App extends Component {
                     this.visualizeDijkstras();
                   } else if (pathfinding_algorithm === "dfs") {
                     this.visualizeDFS();
+                  } else if (pathfinding_algorithm === "astar") {
+                    this.visualizeAStar();
                   }
                 });
           } else {
@@ -365,6 +393,8 @@ export default class App extends Component {
                     this.visualizeDijkstras();
                   } else if (pathfinding_algorithm === "dfs") {
                     this.visualizeDFS();
+                  } else if (pathfinding_algorithm === "astar") {
+                    this.visualizeAStar();
                   }
                 });
           } else {
@@ -409,6 +439,8 @@ export default class App extends Component {
                     this.visualizeDijkstras();
                   } else if (pathfinding_algorithm === "dfs") {
                     this.visualizeDFS();
+                  } else if (pathfinding_algorithm === "astar") {
+                    this.visualizeAStar();
                   }
                 });
           } else {
@@ -439,6 +471,8 @@ export default class App extends Component {
                 this.visualizeDijkstras();
               } else if (pathfinding_algorithm === "dfs") {
                 this.visualizeDFS();
+              } else if (pathfinding_algorithm === "astar") {
+                this.visualizeAStar();
               }
             });
           } else {
@@ -460,6 +494,8 @@ export default class App extends Component {
                 this.visualizeDijkstras();
               } else if (pathfinding_algorithm === "dfs") {
                 this.visualizeDFS();
+              } else if (pathfinding_algorithm === "astar") {
+                this.visualizeAStar();
               }
             });
           } else{
@@ -487,6 +523,8 @@ export default class App extends Component {
                 this.visualizeDijkstras();
               } else if (pathfinding_algorithm === "dfs") {
                 this.visualizeDFS();
+              } else if (pathfinding_algorithm === "astar") {
+                this.visualizeAStar();
               }
           });
           }
@@ -597,6 +635,37 @@ export default class App extends Component {
     // this.setState({post_animation: true});
   }
 
+  visualizeAStar() {
+    console.log("ASTAR BOI");
+
+    // this.setState({post_animation: true});
+    const { grid, mouseIsPressed, start_row, start_col, finish_row, finish_col} = this.state;
+    grid.map( function(row) {
+      return row.map( function (cell ) {
+        cell.previousNode = null;
+        cell.isVisited = false;
+        cell.distance = Infinity;
+        return;
+      })
+    })
+
+    const start_node = grid[start_row][start_col];
+    const finish_node = grid[finish_row][finish_col];
+    const node_order = A_STAR(grid, start_node, finish_node);
+    const shortest_path_order = getShortestPathAStar(finish_node);
+    // this.setState({grid: new_grid});
+
+    if (!this.state.post_animation) {
+      this.animateAlgorithm(node_order, shortest_path_order);
+    } else {
+
+      this.animateAlgorithmInstant(node_order, shortest_path_order);
+    }
+    this.setState({pathfinding_algorithm: "astar"});
+    this.setState({post_animation: true});
+
+  }
+
   visualizeBFS() {
     // console.log(`(${this.state.start_row}, ${this.state.start_col}) (visualizeBFS)`);
     this.setState({post_animation: true});
@@ -677,8 +746,74 @@ export default class App extends Component {
 
   }
 
+  animateMazeAlgorithm(path_order) {
+    const {start_row, start_col, finish_row, finish_col, grid} = this.state;
+    // console.log("REEEEE");
+    let counter = 0;
+    for (const row of grid) {
+      for (const node of row) {
+        counter++;
+        //setTimeout(() => {
+        if (document.getElementById(`node-${node.row}-${node.col}`).className !=
+        'node node-start' && document.getElementById(`node-${node.row}-${node.col}`).className !=
+        'node node-finish') {
+          document.getElementById(`node-${node.row}-${node.col}`).className =
+          'node node-wall';
+        }
+      //}, 2 * counter)
+      }
+    }
+
+    counter = 0;
+    for (const node of path_order) {
+      // console.log(`node-${node.row}-${node.col}`)
+      counter++;
+      setTimeout(() => {
+        if (document.getElementById(`node-${node.row}-${node.col}`).className !=
+        'node node-start' && document.getElementById(`node-${node.row}-${node.col}`).className !=
+        'node node-finish') {
+          document.getElementById(`node-${node.row}-${node.col}`).className =
+          'node ';
+        }
+      }, 5 * counter)
+    }
+  }
+
+  visualizeMazeKruskals() {
+    const { grid, mouseIsPressed, start_row, start_col, finish_row, finish_col, maze_post_animation} = this.state;
+    grid.map( function(row) {
+      return row.map( function (cell ) {
+        //setTimeout(() => {
+        cell.previousNode = null;
+        cell.isVisited = false;
+        cell.distance = Infinity;
+        // cell.isWall=false;
+        // if (document.getElementById(`node-${cell.row}-${cell.col}`).className !=
+        // 'node node-start' && document.getElementById(`node-${cell.row}-${cell.col}`).className !=
+        // 'node node-finish') {
+        //   document.getElementById(`node-${cell.row}-${cell.col}`).className =
+        //   'node ';
+        // }
+        
+        //}, 0.5*counter);
+        return;
+      })
+    });
+
+    const start_node = grid[start_row][start_col];
+    const finish_node = grid[finish_row][finish_col];
+    const maze_and_path = MazeKruskals(grid, start_node, finish_node);
+    const maze = maze_and_path[0];
+    // console.log(maze);
+    const path_order = maze_and_path[1];
+    if (!maze_post_animation) {
+      this.animateMazeAlgorithm(path_order);
+    }
+    this.setState({grid: maze, start_row: 1, start_col: 1, finish_row: grid.length-2, finish_col: grid[0].length -2, maze_post_animation: true});
+  }
+
   visualizeMazeDFS() {
-    const { grid, mouseIsPressed, start_row, start_col, finish_row, finish_col} = this.state;
+    const { grid, mouseIsPressed, start_row, start_col, finish_row, finish_col, maze_post_animation} = this.state;
     grid.map( function(row) {
       return row.map( function (cell ) {
         cell.previousNode = null;
@@ -690,8 +825,15 @@ export default class App extends Component {
 
     const start_node = grid[start_row][start_col];
     const finish_node = grid[finish_row][finish_col];
-    const maze = MazeDFS(grid, start_node, finish_node);
-    this.setState({grid: maze, start_row: 1, start_col: 1, finish_row: grid.length-2, finish_col: grid[0].length -2});
+    const maze_and_path = MazeDFS(grid, start_node, finish_node);
+    const maze = maze_and_path[0];
+
+    if (!maze_post_animation) {
+      this.animateMazeAlgorithm(maze_and_path[1]);
+    }
+
+
+    this.setState({grid: maze, start_row: 1, start_col: 1, finish_row: grid.length-2, finish_col: grid[0].length -2, maze_post_animation: true});
   }
 
   
@@ -699,7 +841,7 @@ export default class App extends Component {
     // console.log("clear grid");
     const {grid, start_row, start_col, finish_row, finish_col, row_dimension, col_dimension} = this.state;
     const newGrid = clearGrid(grid, start_row, start_col, finish_row, finish_col, row_dimension, col_dimension);
-    this.setState({grid:newGrid, post_animation: false});
+    this.setState({grid:newGrid, post_animation: false, maze_post_animation: false});
   }
 
 
@@ -738,6 +880,8 @@ export default class App extends Component {
                   handleMazeDFS={this.visualizeMazeDFS.bind(this)}
                   handleMazeAlgorithmChange={this.handleMazeAlgorithmChange.bind(this)}
                   maze_algorithm={maze_algorithm}
+                  handleMazeKruskals={this.visualizeMazeKruskals.bind(this)}
+                  handleAStar={this.visualizeAStar.bind(this)}
                   />
               </div>
             </Grid>
