@@ -1,0 +1,27 @@
+.navbar {
+    display: flex;
+    flex-direction: row;
+    width:100%;
+    /* background-color: rgb(56, 56, 56); */
+    /* padding-right: 30px; */
+    padding-bottom: 20px;
+    /* padding-top: 20px;
+    border-radius: 12px; */
+    margin-bottom: 30px;
+    gap: 30px;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.title-and-navbar {
+    background-color: rgb(56, 56, 56);
+    padding-top: 20px;
+    border-radius: 12px;
+}
+
+.navbar-title {
+    color:white;
+    font-size:35px;
+    width: 100%;
+    text-align: center;
+    padding-bottom: 15px;
+}

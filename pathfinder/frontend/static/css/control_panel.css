@@ -395,12 +395,13 @@ form .button input:hover{
 
 /* Clear Button */
 .clear-grid-button {
-    margin-top: 25px;
+    /* margin-top: 25px; */
     height: 45px;
     color: white;
-    width: 45%;
+    width: 43%;
     display: grid;
     justify-content: center;
+    align-items: center;
 
   /* background: linear-gradient(135deg, #ffffff, #252525); */
   background: #252525;
@@ -418,7 +419,22 @@ form .button input:hover{
 .half-flex-container {
     width: 100%;
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
     margin-bottom: 10px;
+    /* background: red; */
+}
+
+/* Drop down */
+.drop-downs {
+    position: relative;
+    top:20px;
+    display:flex;
+    justify-content: space-between;
+    gap: 15px;
+    width: 100%;
+    padding-right: 160px;
+    padding-left: 50px;
 }

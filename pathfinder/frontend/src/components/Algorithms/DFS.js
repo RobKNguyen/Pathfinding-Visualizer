@@ -18,7 +18,7 @@ export function DFS(grid, start_node, finish_node) {
         visited.push(curr);
         node_queue.pop();
         if (curr === finish_node) break;
-        console.log(`curr: ${curr.row},${curr.col}`);
+        // console.log(`curr: ${curr.row},${curr.col}`);
         let neighbors = getNeighbors(grid, curr, visited, finish_node);
         for (const neighbor of neighbors) {
             neighbor.previousNode = curr;
@@ -26,7 +26,7 @@ export function DFS(grid, start_node, finish_node) {
         }
     }
 
-    console.log(visited);
+    // console.log(visited);
     return visited;
 }
 

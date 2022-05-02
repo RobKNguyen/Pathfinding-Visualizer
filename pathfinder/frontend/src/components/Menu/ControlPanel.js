@@ -119,7 +119,7 @@ export default class ControlPanel extends Component {
                 <>
                 <div className="container">
                     <div className="title">Control Panel</div>
-                    <form action="#">
+                    <form action="">
                         <div className="user-details">
                         <div className="half-flex-container">
                         <div className="input-box">
@@ -148,7 +148,7 @@ export default class ControlPanel extends Component {
 
 
                             <div className="clear-grid-button" onClick={() => handleClearGrid()}>
-                                <p>Clear Grid</p>
+                                <p>Reset</p>
                             </div>
                             </div>
 
@@ -221,7 +221,7 @@ export default class ControlPanel extends Component {
                             </div>
 
                             
-
+                            <div className="drop-downs">
                             <div className="dropdown-box">
                                 <div className="dropdown-button">
                                 <span className="details">Search Algorithm</span>
@@ -232,12 +232,12 @@ export default class ControlPanel extends Component {
                                     handleAlgorithmChange={handleAlgorithmChange}
                                     />
                                 </div>
-                            </div>
-
-
-                            <div className="button">
+                                <div className="button">
                                 <input type="submit" value={`ANIMATE ${pathfinding_algorithm.toUpperCase()}`} onClick={() => {(pathfinding_algorithm === "bfs" ? handleBFS() : (pathfinding_algorithm === "dijkstras") ? handleDijkstras() : (pathfinding_algorithm === "astar") ? handleAStar() : handleDFS())}}></input>
                             </div>
+                            </div>
+
+
 
                             <div className="dropdown-box">
                                 <div className="dropdown-button">
@@ -249,12 +249,13 @@ export default class ControlPanel extends Component {
                                     handleMazeAlgorithmChange={handleMazeAlgorithmChange}
                                     />
                                 </div>
+                                <div className="button">
+                                <input value={`GENERATE ${maze_algorithm.toUpperCase() === "ASTAR" ? "A*" : maze_algorithm.toUpperCase()}`} onClick={() => {(maze_algorithm === "dfs" ? handleMazeDFS() : (maze_algorithm === "kruskals") ? handleMazeKruskals() : handleMazeKruskals())}}></input>
+                                </div>
                             </div>
 
-                            <div className="button">
-                                <input type="submit" value={`GENERATE ${maze_algorithm.toUpperCase()}`} onClick={() => {(maze_algorithm === "dfs" ? handleMazeDFS() : (maze_algorithm === "kruskals") ? handleMazeKruskals() : handleMazeKruskals())}}></input>
+                            
                             </div>
-
                         </div>
                         
 
@@ -296,13 +297,5 @@ const maze_items = [
     {
         id: 2,
         value: "DFS"
-    },
-    {
-        id: 3,
-        value: "Recursive Division"
-    },
-    {
-        id: 4,
-        value: "Search and Kill"
     }
 ]

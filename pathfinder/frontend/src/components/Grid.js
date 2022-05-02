@@ -23,14 +23,14 @@ export default class App extends Component {
         mouseIsPressed: false,
         start_row: 2,
         start_col: 5,
-        finish_row: 30,
-        finish_col: 40,
+        finish_row: 20,
+        finish_col: 20,
         start_node_selected: false,
         finish_node_selected:false,
         post_animation: false,
         pathfinding_algorithm: "bfs",
-        row_dimension: 41,
-        col_dimension: 51,
+        row_dimension: 35,
+        col_dimension: 71,
         maze_algorithm: 'kruskals',
         maze_post_animation: false
     };
@@ -76,16 +76,16 @@ export default class App extends Component {
         this.setState({maze_algorithm: (e.value).toLowerCase()}, () => {
           if ((e.value).toLowerCase() === "bfs") {
             console.log("BFS");
-            this.visualizeBFS();
+            //this.visualizeBFS();
           } else if ((e.value).toLowerCase() === "dijkstras") {
             console.log("DIJKSTRAS");
-            this.visualizeDijkstras();
+            //this.visualizeDijkstras();
           } else if ((e.value).toLowerCase() === "dfs") {
             console.log("DFS");
-            this.visualizeDFS();
+            //this.visualizeDFS();
           } else if ((e.value).toLowerCase() === "astar") {
             console.log("AStar")
-            this.visualizeAStar();
+            //this.visualizeAStar();
           }
         });
   
@@ -598,7 +598,7 @@ export default class App extends Component {
       if (i === visitedNodesInOrder.length) {
         setTimeout(() => {
           this.animateShortestPath(shortest_path_order);
-        }, 10 * i);
+        }, 5 * i);
         return;
       }
       setTimeout(() => {
@@ -610,7 +610,7 @@ export default class App extends Component {
           document.getElementById(`node-${node.row}-${node.col}`).className =
           'node node-visited';
         }
-      }, 10 * i);
+      }, 5 * i);
     }
     
   }
@@ -636,9 +636,7 @@ export default class App extends Component {
   }
 
   visualizeAStar() {
-    console.log("ASTAR BOI");
 
-    // this.setState({post_animation: true});
     const { grid, mouseIsPressed, start_row, start_col, finish_row, finish_col} = this.state;
     grid.map( function(row) {
       return row.map( function (cell ) {
@@ -653,7 +651,6 @@ export default class App extends Component {
     const finish_node = grid[finish_row][finish_col];
     const node_order = A_STAR(grid, start_node, finish_node);
     const shortest_path_order = getShortestPathAStar(finish_node);
-    // this.setState({grid: new_grid});
 
     if (!this.state.post_animation) {
       this.animateAlgorithm(node_order, shortest_path_order);
@@ -852,14 +849,36 @@ export default class App extends Component {
         <>
                 
         
-        
+        <div className="navbar-menu">
+          <Navbar
+            handleRangeChange={this.handleRangeChange.bind(this)}
+            start_row={start_row}
+            start_col={start_col}
+            finish_row={finish_row}
+            finish_col={finish_col}
+            row_dimension={row_dimension}
+            col_dimension={col_dimension}
+            handleSlider={this.handleSlider.bind(this)}
+            pathfinding_algorithm={pathfinding_algorithm}
+            handleDimension={this.handleDimension.bind(this)}
+            handleBFS={this.visualizeBFS.bind(this)}
+            handleDijkstras={this.visualizeDijkstras.bind(this)}
+            handleAlgorithmChange={this.handleAlgorithmChange.bind(this)}
+            handleClearGrid={this.handleClearGrid.bind(this)}
+            handleDFS={this.visualizeDFS.bind(this)}
+            handleMazeDFS={this.visualizeMazeDFS.bind(this)}
+            handleMazeAlgorithmChange={this.handleMazeAlgorithmChange.bind(this)}
+            maze_algorithm={maze_algorithm}
+            handleMazeKruskals={this.visualizeMazeKruskals.bind(this)}
+            handleAStar={this.visualizeAStar.bind(this)}/>
+        </div>
         <Grid container
               spacing={4}
               direction="row"
               justifyContent="center"
             >
               
-            <Grid item xs={4}>
+            {/* <Grid item xs={4}>
               <div className="mega-menu">
                 <ControlPanel
                   handleRangeChange={this.handleRangeChange.bind(this)}
@@ -884,8 +903,8 @@ export default class App extends Component {
                   handleAStar={this.visualizeAStar.bind(this)}
                   />
               </div>
-            </Grid>
-            <Grid item xs={8}
+            </Grid> */}
+            <Grid item xs={12}
                 
                   >
         <div className="grid-container">
