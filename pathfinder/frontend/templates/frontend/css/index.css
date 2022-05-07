@@ -1,0 +1,235 @@
+html,
+
+body {
+  background: linear-gradient(-195deg, #bebebe, #a4fff1, #525252, #ffffff);
+  background-size: 400% 400%;
+  animation: gradient 75s ease infinite;
+}
+
+ /* #main {
+  
+}  */
+
+#app {
+  width: 100%;
+  height: 100%;
+  /* box-sizing: border-box; */
+  /* background: linear-gradient(-195deg, #bebebe, #a4fff1, #525252, #ffffff);
+  background-size: 400% 400%;
+  animation: gradient 75s ease infinite; */
+}
+
+.grid-container{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 680px;
+}
+
+.grid-centered {
+  display: inline-block;
+  box-shadow: 5px 5px 5px 5px #252525;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.grid {
+  /*width: 100%;*/
+  /* background: linear-gradient(-135deg, #efefef, #ffbbbb); */
+
+  padding: auto;
+  width:100%;
+}
+
+
+@keyframes gradient {
+  0% {
+      background-position: 0% 50%;
+  }
+  50% {
+      background-position: 100% 50%;
+  }
+  100% {
+      background-position: 0% 50%;
+  }
+}
+
+/* .mega-menu {
+  justify-content: center;
+  background-color: rgb(197, 197, 197);
+  width: 100%;
+  height: 100%;
+} */
+
+/* .control-form {
+  font-family: 'Ubuntu', sans-serif;
+} */
+
+.right-main {
+  background-color: rgb(46, 46, 46);
+  height:100%;
+  width: 100%;
+}
+
+.node {
+  width: 23px;
+  height: 23px;
+  outline: 1px solid rgb(35, 35, 35);
+  display: inline-block;
+}
+
+.node-wall {
+  width: 23px;
+  height: 23px;
+  /* outline: 1px solid rgb(255, 255, 255); */
+  /* background: linear-gradient(-195deg, #bebebe, #2c2c2c, #101010, #ffffff); */
+  background: rgb(39, 39, 39);
+  /* animation: gradient 5s ease infinite; */
+  /* background-color: rgb(25, 25, 25); */
+  display: inline-block;
+  transition: 0.5s;
+}
+
+.node-start {
+  /* width: 25px;
+  height: 25px;
+  outline: 1px solid rgb(91, 124, 87); */
+  /* background-color: rgb(0, 133, 29); */
+  transition: 0s;
+  content:url('images/start_button.png');
+  background: linear-gradient(-195deg, #bebebe, hsl(130, 100%, 63%), #8a8a8a, #c5ffc3);
+  background-size: 400% 400%;
+  animation: gradient 5s ease infinite;
+  user-select:none;
+  border-radius: 12px;
+  /* display: inline-block; */
+}
+
+.node-finish {
+  /* width: 25px;
+  height: 25px;
+  outline: 1px solid rgb(91, 124, 87); */
+  background: linear-gradient(-195deg, #bebebe, hsl(0, 100%, 50%), #8a8a8a, #ffa8a8);
+  background-size: 400% 400%;
+  animation: gradient 5s ease infinite;
+  border-radius: 5px;
+  transition: 0s;
+  /* display: inline-block; */
+}
+
+.node-visited {
+  animation-name: visitedAnimation;
+  animation-duration: 0.1s;
+  animation-timing-function: ease-in-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+  /* background: linear-gradient(-195deg, #1e2116, #00ffd9, #ff2626, #1c370e);
+  background-size: 400% 400%;
+  animation: gradient 5s ease infinite; */
+}
+
+@keyframes visitedAnimation {
+  0% {
+    transform: scale(0.3);
+    background-color: rgba(255, 67, 67, 0.75);
+    border-radius: 100%;
+  }
+
+  50% {
+    background-color: rgba(17, 104, 217, 0.75);
+  }
+
+  75% {
+    transform: scale(1.2);
+    background-color: rgba(0, 217, 159, 0.75);
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: #f1a8ff;
+  }
+}
+
+.node-shortest-path {
+  animation-name: shortestPath;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+  animation-delay: 0s;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-play-state: running;
+}
+
+@keyframes shortestPath {
+  0% {
+    transform: scale(0.6);
+    background-color: rgb(255, 242, 0);
+  }
+
+  50% {
+    transform: scale(1.2);
+    background-color: rgb(255, 242, 0);
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: rgb(255, 242, 0);
+  }
+}
+
+
+@media only screen and (max-width: 1026px) {
+  .grid {
+      display: none;
+  }
+}
+/* .navbar {
+  height: 10 vh;
+  background: #1b1919;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar-logo {
+  color: white;
+  text-decoration: none;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 10rem;
+}
+
+.nav-items {
+  display: flex;
+  list-style: none;
+  text-align: center;
+  width: 70vw;
+  justify-content: flex-end;
+  margin-right: 2rem;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  height: 10vh;
+}
+
+.nav-item a {
+  text-decoration: none;
+  color: white;
+  font-size: 1.1rem;
+  margin-right: 2rem;
+  padding: 6px 16px;
+  border-radius: 5px;
+}
+
+.nav-item a:hover {
+  background: rgb(0, 212, 212);
+} */

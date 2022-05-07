@@ -1,5 +1,8 @@
 const path = require("path");
 const webpack = require("webpack");
+const HTMLWebpackPlugin = require('html-webpack-plugin');
+const LinkTypePlugin = require('html-webpack-link-type-plugin').HtmlWebpackLinkTypePlugin;
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   entry: "./src/index.js",
@@ -18,11 +21,12 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        include: path.resolve(__dirname, 'src'),
-        exclude: /(node_modules|bower_components|build)/,
-        use: {
-          loader: "css-loader"
-        }
+        use: ['style-loader', 'css-loader']
+        // include: path.resolve(__dirname, 'src'),
+        // exclude: /(node_modules|bower_components|build)/,
+        // use: {
+        //   loader: "css-loader"
+        // }
       },
       {
         test: /\.svg$/,
@@ -47,8 +51,14 @@ module.exports = {
     new webpack.DefinePlugin({
       "process.env": {
         // This has effect on the react lib size
-        NODE_ENV: JSON.stringify("development"),
+        NODE_ENV: JSON.stringify("production"),
       },
     }),
+    new LinkTypePlugin({
+      '*.css' : 'text/css'
+    }),
+    new MiniCssExtractPlugin({
+      insert:'head'
+    })
   ]
 };

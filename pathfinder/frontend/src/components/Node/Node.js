@@ -1,6 +1,6 @@
 import React, {Component, useRef} from 'react';
 
-import './Node.css';
+// import './Node.css';
 
 export default class Node extends Component {
 

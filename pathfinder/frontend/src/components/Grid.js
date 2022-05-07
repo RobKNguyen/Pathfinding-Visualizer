@@ -1,6 +1,11 @@
 import React, { Component} from "react";
 import Node from './Node/Node';
-import './css/Grid.css';
+// import './css/Grid.css';
+import './css/index.css';
+import './css/control_panel.css';
+import './css/dropdown.css';
+import './css/navbar.css';
+// import '../../static/frontend/main.js';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Navbar from './Menu/Navbar';
 import ControlPanel from './Menu/ControlPanel';
@@ -944,7 +949,9 @@ export default class App extends Component {
         
             
         </Grid>
+        {/* <script src="../../static/frontend/main.js"></script> */}
         </>
+        
       
     );
   }

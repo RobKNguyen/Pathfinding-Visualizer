@@ -1,11 +1,62 @@
 version: "3.8"
 services:
-  app:
-    build: .
+  pathfinder_gunicorn:
+    build:
+      context: .
     volumes:
-      - .:/pathfinder
+      - static:/static
+      - ./frontend/static/:/frontend/static/
     ports:
-      - 8000:8000
-    image: app:pathfinder
-    container_name: pathfinder_container
-    command: python manage.py runserver 0.0.0.0:8000
+      - "8080:8080"
+    image: pathfinder_gunicorn:v1
+    container_name: pathfinder_gunicorn
+  
+  nginx:
+    build: ./nginx
+    volumes:
+      - static:/static
+    ports:
+      - "80:80"
+    depends_on:
+      - pathfinder_gunicorn
+
+volumes:
+  static:
+
+# version: "3.9"
+   
+# services:
+#   db:
+#     image: postgres
+#     volumes:
+#       - ./data/db:/var/lib/postgresql/data
+#     environment:
+#       - POSTGRES_DB=postgres
+#       - POSTGRES_USER=postgres
+#       - POSTGRES_PASSWORD=postgres
+#   app:
+#     build: .
+#     command: python manage.py runserver 0.0.0.0:8080
+#     volumes:
+#       - .:/pathfinder
+#     ports:
+#       - "8080:8080"
+#     environment:
+#       - POSTGRES_NAME=postgres
+#       - POSTGRES_USER=postgres
+#       - POSTGRES_PASSWORD=postgres
+#     depends_on:
+#       - db
+
+
+# version: "3.8"
+# services:
+#   app:
+#     build: .
+#     volumes:
+#       - .:/django
+#     ports:
+#       - 8080:8080
+#     image: app:django
+#     container_name: django_container
+#     command: python manage.py runserver 0.0.0.0:8080
